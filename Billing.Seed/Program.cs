@@ -12,16 +12,36 @@ namespace Billing.Seed
     {
         static void Main(string[] args)
         {
-            using(BillingContext context = new BillingContext())
+            using (BillingContext context = new BillingContext())
             {
-                IBillingRepository<Agent> agents = new BillingRepository<Agent>(context);
-                agents.Insert(new Agent() { Name = "Mehmed Baždarević" });
+                context.Agents.Add(new Agent() { Name = "Mehmed Baždarević" });
                 context.Agents.Add(new Agent() { Name = "Safet Sušić" });
-                context.Towns.Add(new Town() { Zip = "71000", Name = "Sarajevo", Region = Region.Sarajevo });
-                context.Towns.Add(new Town() { Zip = "72000", Name = "Zenica", Region = Region.Zenica });
-                context.Towns.Add(new Town() { Zip = "75000", Name = "Tuzla", Region = Region.Tuzla });
                 context.SaveChanges();
+                foreach (var aga in context.Agents) Console.WriteLine($"{aga.Id}: {aga.Name}");
+                Console.WriteLine("----------*----------");
+
+                Agent oldAgent = context.Agents.FirstOrDefault(x => x.Name == "Mehmed Baždarević");
+                Agent newAgent = new Agent() { Id = oldAgent.Id, Name = "Edin Džeko" };
+                context.Entry(oldAgent).CurrentValues.SetValues(newAgent);
+                context.SaveChanges();
+
+                int maxId = context.Agents.Max(x => x.Id);
+                Agent agent = context.Agents.Find(maxId);
+                context.Agents.Remove(agent);
+                context.SaveChanges();
+                foreach (var aga in context.Agents) Console.WriteLine($"{aga.Id}: {aga.Name}");
+
+                Console.ReadKey();
             }
         }
     }
 }
+
+
+
+
+
+
+
+
+

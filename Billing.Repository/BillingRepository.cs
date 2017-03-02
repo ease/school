@@ -1,10 +1,6 @@
 ﻿using Billing.Database;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Billing.Repository
 {
@@ -29,12 +25,12 @@ namespace Billing.Repository
             return dbSet.Find(id);
         }
 
-        public void Insert(Entity entity)
+        public virtual void Insert(Entity entity)
         {
             dbSet.Add(entity);
         }
 
-        public void Update(Entity entity, int id)
+        public virtual void Update(Entity entity, int id)
         {
             Entity oldEntity = Get(id);
             context.Entry(oldEntity).CurrentValues.SetValues(entity);
@@ -43,7 +39,7 @@ namespace Billing.Repository
         public void Delete(int id)
         {
             Entity oldEntity = Get(id);
-            context.Entry(oldEntity).CurrentValues.SetValues(entity);
+            dbSet.Remove(oldEntity);
         }
 
         public bool Commit()
