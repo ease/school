@@ -18,4 +18,91 @@ namespace Billing.Database
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Town> Towns { get; set; }
     }
+    
+            protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Ignore<Basic>();
+            modelBuilder.Entity<Agent>().Map<Agent>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<Category>().Map<Category>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<Customer>().Map<Customer>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<Invoice>().Map<Invoice>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<Item>().Map<Item>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<Procurement>().Map<Procurement>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<Product>().Map<Product>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<Shipper>().Map<Shipper>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<Supplier>().Map<Supplier>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<Stock>().Map<Stock>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<Town>().Map<Town>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+        }
+
+        public override int SaveChanges()
+        {
+            foreach (var entry in ChangeTracker.Entries().Where(p => p.State == EntityState.Deleted))
+            {
+                SoftDelete(entry);
+            }
+            return base.SaveChanges();
+        }
+
+        private void SoftDelete(DbEntityEntry entry)
+        {
+            Type entryEntityType = entry.Entity.GetType();
+
+            string tableName = GetTableName(entryEntityType);
+            string primaryKeyName = GetPrimaryKeyName(entryEntityType);
+
+            string deletequery =
+                string.Format(
+                    "UPDATE {0} SET Deleted = 1 WHERE {1} = @id",
+                        tableName, primaryKeyName);
+
+            Database.ExecuteSqlCommand(
+                deletequery,
+                new SqlParameter("@id", entry.OriginalValues[primaryKeyName]));
+
+            entry.State = EntityState.Detached;
+        }
+
+        private static Dictionary<Type, EntitySetBase> _mappingCache = 
+                    new Dictionary<Type, EntitySetBase>();
+
+        private EntitySetBase GetEntitySet(Type type)
+        {
+            if (!_mappingCache.ContainsKey(type))
+            {
+                ObjectContext octx = ((IObjectContextAdapter)this).ObjectContext;
+
+                string typeName = ObjectContext.GetObjectType(type).Name;
+
+                var es = octx.MetadataWorkspace
+                                .GetItemCollection(DataSpace.SSpace)
+                                .GetItems<EntityContainer>()
+                                .SelectMany(c => c.BaseEntitySets
+                                                .Where(e => e.Name == typeName))
+                                .FirstOrDefault();
+
+                if (es == null)
+                    throw new ArgumentException("Entity type not found in GetTableName", typeName);
+
+                _mappingCache.Add(type, es);
+            }
+
+            return _mappingCache[type];
+        }
+
+        private string GetTableName(Type type)
+        {
+            EntitySetBase es = GetEntitySet(type);
+
+            return string.Format("[{0}].[{1}]",
+                es.MetadataProperties["Schema"].Value,
+                es.MetadataProperties["Table"].Value);
+        }
+
+        private string GetPrimaryKeyName(Type type)
+        {
+            EntitySetBase es = GetEntitySet(type);
+
+            return es.ElementType.KeyMembers[0].Name;
+        }
 }
