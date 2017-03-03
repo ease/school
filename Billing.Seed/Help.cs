@@ -5,14 +5,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Billing.Database;
 
 namespace Billing.Seed
 {
     public static class Help
     {
-        public static DataTable OpenExcel(string path, string sheet)
+        public static BillingContext Context = new BillingContext();
+        public static string SourceRoot = @"C:\Ntg\Billing\billing.xls";
+
+        public static Dictionary<int, int> dicAgen = new Dictionary<int, int>();
+        public static Dictionary<int, int> dicProd = new Dictionary<int, int>();
+        public static Dictionary<int, int> dicCatt = new Dictionary<int, int>();
+        public static Dictionary<int, int> dicShip = new Dictionary<int, int>();
+        public static Dictionary<int, int> dicSupp = new Dictionary<int, int>();
+        public static Dictionary<int, int> dicCust = new Dictionary<int, int>();
+
+        public static DataTable OpenExcel(string sheet)
         {
-            var cs = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=Excel 8.0", path);
+            var cs = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=Excel 8.0", SourceRoot);
             OleDbConnection conn = new OleDbConnection(cs);
             conn.Open();
 
@@ -24,6 +35,7 @@ namespace Billing.Seed
             da.Fill(dt);
             conn.Close();
 
+            Console.Write($"{sheet}: ");
             return dt;
         }
 
