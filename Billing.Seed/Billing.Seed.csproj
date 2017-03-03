@@ -67,7 +67,7 @@
       <Name>Billing.Database</Name>
     </ProjectReference>
     <ProjectReference Include="..\Billing.Repository\Billing.Repository.csproj">
-      <Project>{082e3d5e-5ae9-4cf5-89d4-097599cb1439}</Project>
+      <Project>{38924049-fdb6-4a8d-a68c-2ffdb898229d}</Project>
       <Name>Billing.Repository</Name>
     </ProjectReference>
   </ItemGroup>
