@@ -28,8 +28,7 @@ namespace Billing.Seed
             conn.Open();
 
             OleDbCommand cmd = new OleDbCommand(string.Format("SELECT * FROM [{0}$]", sheet), conn);
-            OleDbDataAdapter da = new OleDbDataAdapter();
-            da.SelectCommand = cmd;
+            OleDbDataAdapter da = new OleDbDataAdapter(cmd);
 
             DataTable dt = new DataTable();
             da.Fill(dt);
