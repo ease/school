@@ -14,7 +14,7 @@ namespace Billing.Database
         public int Id { get; set; }
         public string InvoiceNo { get; set; }
         public DateTime Date { get; set; }
-        public DateTime ShipperOn { get; set; }
+        public DateTime ShippedOn { get; set; }
         public int Status { get; set; }
         [NotMapped]
         public double SubTotal
