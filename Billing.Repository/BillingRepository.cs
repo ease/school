@@ -1,10 +1,11 @@
 ﻿using Billing.Database;
+using System;
 using System.Data.Entity;
 using System.Linq;
 
 namespace Billing.Repository
 {
-    public class BillingRepository<Entity> : IBillingRepository<Entity> where Entity : class
+    public class BillingRepository<Entity> : IBillingRepository<Entity> where Entity : class, IDisposable
     {
         protected BillingContext context;
         protected DbSet<Entity> dbSet;

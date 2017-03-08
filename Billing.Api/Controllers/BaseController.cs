@@ -16,6 +16,6 @@ namespace Billing.Api.Controllers
 
         protected UnitOfWork UnitOfWork { get { return _unitOfWork ?? (_unitOfWork = new UnitOfWork()); } }
 
-        protected Factory Factory { get { return _factory ?? (_factory = new Factory(_unitOfWork.Context)); } }
+        protected Factory Factory { get { return _factory ?? (_factory = new Factory()); } }
     }
 }

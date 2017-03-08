@@ -8,12 +8,6 @@ namespace Billing.Api.Models
 {
     public class Factory
     {
-        private BillingContext context;
-        public Factory(BillingContext _context)
-        {
-            context = _context;
-        }
-
         public AgentModel Create(Agent agent)
         {
             return new AgentModel()
