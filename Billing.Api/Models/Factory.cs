@@ -33,5 +33,18 @@ namespace Billing.Api.Models
                 Products = category.Products.Count
             };
         }
+
+        public ProductModel Create(Product product)
+        {
+            return new ProductModel()
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Category = product.Category.Name,
+                Unit = product.Unit,
+                Stock = (product.Stock == null) ? 0 : (int)(product.Stock.Input - product.Stock.Output)
+            };
+        }
     }
 }
