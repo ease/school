@@ -8,18 +8,30 @@ namespace Billing.Api.Models
 {
     public class Factory
     {
+        private BillingContext context;
+        public Factory(BillingContext _context)
+        {
+            context = _context;
+        }
+
         public AgentModel Create(Agent agent)
         {
-            AgentModel model = new AgentModel()
+            return new AgentModel()
             {
                 Id = agent.Id,
-                Name = agent.Name
+                Name = agent.Name,
+                Towns = agent.Towns.Where(x => x.Customers.Count != 0).Select(x => x.Name).ToList()
             };
-            foreach (Town town in agent.Towns.Where(x => x.Customers.Count != 0).ToList())
+        }
+
+        public CategoryModel Create(Category category)
+        {
+            return new CategoryModel()
             {
-                model.Towns.Add(town.Name);
-            }
-            return model;
+                Id = category.Id,
+                Name = category.Name,
+                Products = category.Products.Count
+            };
         }
     }
 }
