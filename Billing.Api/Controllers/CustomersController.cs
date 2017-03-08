@@ -1,5 +1,4 @@
-﻿using Billing.Api.Models;
-using Billing.Database;
+﻿using Billing.Database;
 using Billing.Repository;
 using System;
 using System.Linq;
@@ -7,13 +6,19 @@ using System.Web.Http;
 
 namespace Billing.Api.Controllers
 {
-    [RoutePrefix("api/categories")]
-    public class CategoriesController : BaseController
+    [RoutePrefix("api/customers")]
+    public class CustomersController : BaseController
     {
         [Route("")]
         public IHttpActionResult Get()
         {
-            return Ok(UnitOfWork.Categories.Get().ToList().Select(x => Factory.Create(x)).ToList());
+            return Ok(UnitOfWork.Customers.Get().ToList().Select(x => Factory.Create(x)).ToList());
+        }
+
+        [Route("{name}")]
+        public IHttpActionResult Get(string name)
+        {
+            return Ok(UnitOfWork.Customers.Get().Where(x => x.Name.Contains(name)).ToList().Select(a => Factory.Create(a)).ToList());
         }
 
         [Route("{id:int}")]
@@ -21,14 +26,14 @@ namespace Billing.Api.Controllers
         {
             try
             {
-                Category category = UnitOfWork.Categories.Get(id);
-                if (category == null)
+                Customer customer = UnitOfWork.Customers.Get(id);
+                if (customer == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    return Ok(Factory.Create(category));
+                    return Ok(Factory.Create(customer));
                 }
             }
             catch (Exception ex)

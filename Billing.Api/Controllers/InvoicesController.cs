@@ -7,13 +7,13 @@ using System.Web.Http;
 
 namespace Billing.Api.Controllers
 {
-    [RoutePrefix("api/categories")]
-    public class CategoriesController : BaseController
+    [RoutePrefix("api/invoices")]
+    public class InvoicesController : BaseController
     {
         [Route("")]
         public IHttpActionResult Get()
         {
-            return Ok(UnitOfWork.Categories.Get().ToList().Select(x => Factory.Create(x)).ToList());
+            return Ok(UnitOfWork.Invoices.Get().ToList().Select(x => Factory.Create(x)).ToList());
         }
 
         [Route("{id:int}")]
@@ -21,14 +21,14 @@ namespace Billing.Api.Controllers
         {
             try
             {
-                Category category = UnitOfWork.Categories.Get(id);
-                if (category == null)
+                Invoice invoice = UnitOfWork.Invoices.Get(id);
+                if (invoice == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    return Ok(Factory.Create(category));
+                    return Ok(Factory.Create(invoice));
                 }
             }
             catch (Exception ex)

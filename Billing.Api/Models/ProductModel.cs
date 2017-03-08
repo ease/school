@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Billing.Api.Models
+﻿namespace Billing.Api.Models
 {
     public class ProductModel
     {
@@ -12,6 +7,7 @@ namespace Billing.Api.Models
         public string Unit { get; set; }
         public double Price { get; set; }
         public string Category { get; set; }
+        public int CategoryId { get; set; }
         public int Stock { get; set; }
     }
 }

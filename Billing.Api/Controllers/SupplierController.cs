@@ -1,25 +1,23 @@
-﻿using Billing.Api.Models;
-using Billing.Database;
-using Billing.Repository;
+﻿using Billing.Database;
 using System;
 using System.Linq;
 using System.Web.Http;
 
 namespace Billing.Api.Controllers
 {
-    [RoutePrefix("api/agents")]
-    public class AgentsController : BaseController
+    [RoutePrefix("api/suppliers")]
+    public class SuppliersController : BaseController
     {
         [Route("")]
         public IHttpActionResult Get()
         {
-            return Ok(UnitOfWork.Agents.Get().ToList().Select(x => Factory.Create(x)).ToList());
+            return Ok(UnitOfWork.Suppliers.Get().ToList().Select(x => Factory.Create(x)).ToList());
         }
 
         [Route("{name}")]
         public IHttpActionResult Get(string name)
         {
-            return Ok(UnitOfWork.Agents.Get().Where(x => x.Name.Contains(name)).ToList().Select(a => Factory.Create(a)).ToList());
+            return Ok(UnitOfWork.Suppliers.Get().Where(x => x.Name.Contains(name)).ToList().Select(a => Factory.Create(a)).ToList());
         }
 
         [Route("{id:int}")]
@@ -27,17 +25,17 @@ namespace Billing.Api.Controllers
         {
             try
             {
-                Agent agent = UnitOfWork.Agents.Get(id);
-                if (agent == null)
+                Supplier supplier = UnitOfWork.Suppliers.Get(id);
+                if (supplier == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    return Ok(Factory.Create(agent));
+                    return Ok(Factory.Create(supplier));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
