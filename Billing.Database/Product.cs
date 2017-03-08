@@ -20,7 +20,5 @@ namespace Billing.Database
         public virtual Stock Stock { get; set; }
         public virtual List<Procurement> Procurements { get; set; }
         public virtual List<Item> Items { get; set; }
-
-        // ovo je komentar
     }
 }
