@@ -21,14 +21,8 @@ namespace Billing.Api.Controllers
             return Ok(UnitOfWork.Products.Get().Where(x => x.Name.Contains(name)).ToList().Select(a => Factory.Create(a)).ToList());
         }
 
-        [Route("class/{clId:int}")]
-        public IHttpActionResult Get(int clId)
-        {
-            return Ok(UnitOfWork.Products.Get().Where(x => x.Category.Id == clId).ToList().Select(a => Factory.Create(a)).ToList());
-        }
-
         [Route("{id:int}")]
-        public IHttpActionResult GetById(int id)
+        public IHttpActionResult Get(int id)
         {
             Product product = UnitOfWork.Products.Get(id);
             if (product == null) return NotFound();
