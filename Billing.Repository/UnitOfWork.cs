@@ -28,11 +28,7 @@ namespace Billing.Repository
         {
             get
             {
-                if (_agents == null)
-                {
-                    _agents = new BillingRepository<Agent>(_context);
-                }
-                return _agents;   
+                return _agents ?? (_agents = new BillingRepository<Agent>(_context));   
             }
         }
 
