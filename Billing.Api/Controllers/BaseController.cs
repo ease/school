@@ -21,7 +21,7 @@ namespace Billing.Api.Controllers
         {
             get
             {
-                return _factory ?? (_factory = new Factory());
+                return _factory ?? (_factory = new Factory(UnitOfWork));
             }
         }
     }

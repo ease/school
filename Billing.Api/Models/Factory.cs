@@ -1,10 +1,17 @@
 ﻿using Billing.Database;
+using Billing.Repository;
 using System.Linq;
 
 namespace Billing.Api.Models
 {
     public class Factory
     {
+        private UnitOfWork _unitOfWork;
+        public Factory(UnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
         public AgentModel Create(Agent agent)
         {
             return new AgentModel()
@@ -34,6 +41,17 @@ namespace Billing.Api.Models
                 Address = customer.Address,
                 Town = customer.Town.Zip + " " + customer.Town.Name,
                 TownId = customer.Town.Id
+            };
+        }
+
+        public Customer Create(CustomerModel model)
+        {
+            return new Customer()
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Town = _unitOfWork.Towns.Get(model.TownId)
             };
         }
 

@@ -42,5 +42,35 @@ namespace Billing.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Route("")]
+        public IHttpActionResult Post([FromBody]Agent agent)
+        {
+            try
+            {
+                UnitOfWork.Agents.Insert(agent);
+                UnitOfWork.Commit();
+                return Ok(agent);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("{id}")]
+        public IHttpActionResult Put([FromUri] int id, [FromBody]Agent agent)
+        {
+            try
+            {
+                UnitOfWork.Agents.Update(agent, id);
+                UnitOfWork.Commit();
+                return Ok(agent);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

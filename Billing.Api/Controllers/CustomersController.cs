@@ -1,4 +1,5 @@
-﻿using Billing.Database;
+﻿using Billing.Api.Models;
+using Billing.Database;
 using Billing.Repository;
 using System;
 using System.Linq;
@@ -35,6 +36,53 @@ namespace Billing.Api.Controllers
                 {
                     return Ok(Factory.Create(customer));
                 }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("")]
+        public IHttpActionResult Post([FromBody] CustomerModel model)
+        {
+            try
+            {
+                Customer customer = Factory.Create(model);
+                UnitOfWork.Customers.Insert(customer);
+                UnitOfWork.Commit();
+                return Ok(Factory.Create(customer));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("{id}")]
+        public IHttpActionResult Put(int id, [FromBody] CustomerModel model)
+        {
+            try
+            {
+                Customer customer = Factory.Create(model);
+                UnitOfWork.Customers.Update(customer, id);
+                UnitOfWork.Commit();
+                return Ok(Factory.Create(customer));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("{id}")]
+        public IHttpActionResult Delete(int id)
+        {
+            try
+            {
+                UnitOfWork.Customers.Delete(id);
+                UnitOfWork.Commit();
+                return Ok();
             }
             catch (Exception ex)
             {

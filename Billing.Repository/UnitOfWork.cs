@@ -24,18 +24,7 @@ namespace Billing.Repository
 
         public BillingContext Context { get { return _context; } }
 
-        public IBillingRepository<Agent> Agents
-        {
-            get
-            {
-                if (_agents == null)
-                {
-                    _agents = new BillingRepository<Agent>(_context);
-                }
-                return _agents;   
-            }
-        }
-
+        public IBillingRepository<Agent> Agents { get { return _agents ?? (_agents = new BillingRepository<Agent>(_context));    } }
         public IBillingRepository<Category> Categories { get { return _categories ?? (_categories = new BillingRepository<Category>(_context)); } }
         public IBillingRepository<Customer> Customers { get { return _customers ?? (_customers = new BillingRepository<Customer>(_context)); } }
         public IBillingRepository<Invoice> Invoices { get { return _invoices ?? (_invoices = new BillingRepository<Invoice>(_context)); } }
@@ -45,6 +34,11 @@ namespace Billing.Repository
         public IBillingRepository<Shipper> Shippers { get { return _shippers ?? (_shippers = new BillingRepository<Shipper>(_context)); } }
         public IBillingRepository<Supplier> Suppliers { get { return _suppliers ?? (_suppliers = new BillingRepository<Supplier>(_context)); } }
         public IBillingRepository<Town> Towns { get { return _towns ?? (_towns = new BillingRepository<Town>(_context)); } }
+
+        public void Commit()
+        {
+            _context.SaveChanges();
+        }
 
         public void Dispose()
         {
