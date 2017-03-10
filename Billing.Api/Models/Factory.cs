@@ -97,9 +97,26 @@ namespace Billing.Api.Models
             };
         }
 
+        public Invoice Create(InvoiceModel model)
+        {
+            return new Invoice()
+            {
+                Id = model.Id,
+                InvoiceNo = model.InvoiceNo,
+                Date = model.Date,
+                ShippedOn = model.ShippedOn,
+                Status = model.Status,
+                Customer = _unitOfWork.Customers.Get(model.CustomerId),
+                Agent = _unitOfWork.Agents.Get(model.AgentId),
+                Shipper = _unitOfWork.Shippers.Get(model.ShipperId),
+                Vat = model.Vat,
+                Shipping = model.Shipping
+            };
+        }
+
         public ItemModel Create(Item item)
         {
-            return new Models.ItemModel()
+            return new ItemModel()
             {
                 Id = item.Id,
                 Invoice = item.Invoice.InvoiceNo,
@@ -110,6 +127,18 @@ namespace Billing.Api.Models
                 Price = item.Price,
                 Quantity = item.Quantity,
                 SubTotal = item.SubTotal
+            };
+        }
+
+        public Item Create(ItemModel model)
+        {
+            return new Item()
+            {
+                Id = model.Id,
+                Invoice = _unitOfWork.Invoices.Get(model.InvoiceId),
+                Product = _unitOfWork.Products.Get(model.ProductId),
+                Price = model.Price,
+                Quantity = model.Quantity
             };
         }
 
@@ -127,6 +156,20 @@ namespace Billing.Api.Models
                 ProductId = procurement.Product.Id,
                 Supplier = procurement.Supplier.Name,
                 SupplierId = procurement.Supplier.Id
+            };
+        }
+
+        public Procurement Create(ProcurementModel model)
+        {
+            return new Procurement()
+            {
+                Id = model.Id,
+                Document = model.Document,
+                Date = model.Date,
+                Quantity = model.Quantity,
+                Price = model.Price,
+                Product = _unitOfWork.Products.Get(model.ProductId),
+                Supplier = _unitOfWork.Suppliers.Get(model.SupplierId)
             };
         }
 

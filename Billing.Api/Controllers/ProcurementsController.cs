@@ -1,19 +1,24 @@
 ﻿using Billing.Api.Models;
 using Billing.Database;
-using Billing.Repository;
 using System;
 using System.Linq;
 using System.Web.Http;
 
 namespace Billing.Api.Controllers
 {
-    [RoutePrefix("api/items")]
-    public class ItemsController : BaseController
+    [RoutePrefix("api/procurements")]
+    public class ProcurementsController : BaseController
     {
         [Route("")]
         public IHttpActionResult Get()
         {
-            return Ok(UnitOfWork.Items.Get().ToList().Select(x => Factory.Create(x)).ToList());
+            return Ok(UnitOfWork.Procurements.Get().ToList().Select(x => Factory.Create(x)).ToList());
+        }
+
+        [Route("doc/{doc}")]
+        public IHttpActionResult Get(string doc)
+        {
+            return Ok(UnitOfWork.Procurements.Get().Where(x => x.Document == doc).ToList().Select(x => Factory.Create(x)).ToList());
         }
 
         [Route("{id:int}")]
@@ -21,14 +26,14 @@ namespace Billing.Api.Controllers
         {
             try
             {
-                Item item = UnitOfWork.Items.Get(id);
-                if (item == null)
+                Procurement procurement = UnitOfWork.Procurements.Get(id);
+                if (procurement == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    return Ok(Factory.Create(item));
+                    return Ok(Factory.Create(procurement));
                 }
             }
             catch (Exception ex)
@@ -38,14 +43,14 @@ namespace Billing.Api.Controllers
         }
 
         [Route("")]
-        public IHttpActionResult Post(ItemModel model)
+        public IHttpActionResult Post(ProcurementModel model)
         {
             try
             {
-                Item item = Factory.Create(model);
-                UnitOfWork.Items.Insert(item);
+                Procurement procurement = Factory.Create(model);
+                UnitOfWork.Procurements.Insert(procurement);
                 UnitOfWork.Commit();
-                return Ok(Factory.Create(item));
+                return Ok(Factory.Create(procurement));
             }
             catch (Exception ex)
             {
@@ -54,14 +59,14 @@ namespace Billing.Api.Controllers
         }
 
         [Route("{id}")]
-        public IHttpActionResult Put(int id, ItemModel model)
+        public IHttpActionResult Put(int id, ProcurementModel model)
         {
             try
             {
-                Item item = Factory.Create(model);
-                UnitOfWork.Items.Update(item, id);
+                Procurement procurement = Factory.Create(model);
+                UnitOfWork.Procurements.Update(procurement, id);
                 UnitOfWork.Commit();
-                return Ok(Factory.Create(item));
+                return Ok(Factory.Create(procurement));
             }
             catch (Exception ex)
             {
@@ -74,7 +79,7 @@ namespace Billing.Api.Controllers
         {
             try
             {
-                UnitOfWork.Items.Delete(id);
+                UnitOfWork.Procurements.Delete(id);
                 UnitOfWork.Commit();
                 return Ok();
             }

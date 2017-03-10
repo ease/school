@@ -36,5 +36,52 @@ namespace Billing.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Route("")]
+        public IHttpActionResult Post(InvoiceModel model)
+        {
+            try
+            {
+                Invoice invoice = Factory.Create(model);
+                UnitOfWork.Invoices.Insert(invoice);
+                UnitOfWork.Commit();
+                return Ok(Factory.Create(invoice));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("{id}")]
+        public IHttpActionResult Put(int id, InvoiceModel model)
+        {
+            try
+            {
+                Invoice invoice = Factory.Create(model);
+                UnitOfWork.Invoices.Update(invoice, id);
+                UnitOfWork.Commit();
+                return Ok(Factory.Create(invoice));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("{id}")]
+        public IHttpActionResult Delete(int id)
+        {
+            try
+            {
+                UnitOfWork.Invoices.Delete(id);
+                UnitOfWork.Commit();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
