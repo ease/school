@@ -40,7 +40,6 @@ namespace Billing.Repository
             if (oldEntity != null)
             {
                 context.Entry(oldEntity).CurrentValues.SetValues(entity);
-                oldEntity = entity;
             }
         }
 
