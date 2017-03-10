@@ -1,5 +1,9 @@
 ﻿using Billing.Database;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace Billing.Repository
@@ -33,13 +37,17 @@ namespace Billing.Repository
         public virtual void Update(Entity entity, int id)
         {
             Entity oldEntity = Get(id);
-            context.Entry(oldEntity).CurrentValues.SetValues(entity);
+            if (oldEntity != null)
+            {
+                context.Entry(oldEntity).CurrentValues.SetValues(entity);
+                oldEntity = entity;
+            }
         }
 
         public void Delete(int id)
         {
             Entity oldEntity = Get(id);
-            dbSet.Remove(oldEntity);
+            if (oldEntity != null) dbSet.Remove(oldEntity);
         }
 
         public bool Commit()

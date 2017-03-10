@@ -1,6 +1,7 @@
 ﻿using Billing.Api.Models;
 using Billing.Database;
 using Billing.Repository;
+using System;
 using System.Linq;
 using System.Web.Http;
 
@@ -27,6 +28,53 @@ namespace Billing.Api.Controllers
             Product product = UnitOfWork.Products.Get(id);
             if (product == null) return NotFound();
             return Ok(Factory.Create(product));
+        }
+
+        [Route("")]
+        public IHttpActionResult Post(ProductModel model)
+        {
+            try
+            {
+                Product product = Factory.Create(model);
+                UnitOfWork.Products.Insert(product);
+                UnitOfWork.Commit();
+                return Ok(Factory.Create(product));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("{id:int}")]
+        public IHttpActionResult Put(int id, ProductModel model)
+        {
+            try
+            {
+                Product product = Factory.Create(model);
+                UnitOfWork.Products.Update(product, id);
+                UnitOfWork.Commit();
+                return Ok(Factory.Create(product));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("{id:int}")]
+        public IHttpActionResult Delete(int id)
+        {
+            try
+            {
+                UnitOfWork.Products.Delete(id);
+                UnitOfWork.Commit();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

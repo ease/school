@@ -6,5 +6,6 @@
         public string Zip { get; set; }
         public string Name { get; set; }
         public string Region { get; set; }
+        public int RegionId { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Billing.Api.Models
+﻿using Billing.Database;
+
+namespace Billing.Api.Models
 {
     public class ProductModel
     {
@@ -8,6 +10,8 @@
         public double Price { get; set; }
         public string Category { get; set; }
         public int CategoryId { get; set; }
-        public int Stock { get; set; }
+        public double Input { get; set; }
+        public double Output { get; set; }
+        public double Inventory { get; set; }
     }
 }

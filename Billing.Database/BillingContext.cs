@@ -57,7 +57,7 @@ namespace Billing.Database
 
             Database.ExecuteSqlCommand(deletequery, new SqlParameter("@id", entry.OriginalValues[primaryKeyName]));
 
-            entry.State = EntityState.Detached;
+            //entry.State = EntityState.Detached;
         }
 
         private static Dictionary<Type, EntitySetBase> _mappingCache =

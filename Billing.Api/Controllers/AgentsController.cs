@@ -42,5 +42,52 @@ namespace Billing.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Route("")]
+        public IHttpActionResult Post(AgentModel model)
+        {
+            try
+            {
+                Agent agent = Factory.Create(model);
+                UnitOfWork.Agents.Insert(agent);
+                UnitOfWork.Agents.Commit();
+                return Ok(Factory.Create(agent));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("{id:int}")]
+        public IHttpActionResult Put(int id, AgentModel model)
+        {
+            try
+            {
+                Agent agent = Factory.Create(model);
+                UnitOfWork.Agents.Update(agent, id);
+                UnitOfWork.Agents.Commit();
+                return Ok(Factory.Create(agent));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("{id:int}")]
+        public IHttpActionResult Delete(int id)
+        {
+            try
+            {
+                UnitOfWork.Agents.Delete(id);
+                UnitOfWork.Agents.Commit();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
