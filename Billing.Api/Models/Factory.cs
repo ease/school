@@ -22,6 +22,15 @@ namespace Billing.Api.Models
             };
         }
 
+        public Agent Create(AgentModel model)
+        {
+            return new Agent()
+            {
+                Id = model.Id,
+                Name = model.Name
+            };
+        }
+
         public CategoryModel Create(Category category)
         {
             return new CategoryModel()
@@ -29,6 +38,15 @@ namespace Billing.Api.Models
                 Id = category.Id,
                 Name = category.Name,
                 Products = category.Products.Count
+            };
+        }
+
+        public Category Create(CategoryModel model)
+        {
+            return new Category()
+            {
+                Id = model.Id,
+                Name = model.Name
             };
         }
 
@@ -122,7 +140,25 @@ namespace Billing.Api.Models
                 Category = product.Category.Name,
                 CategoryId = product.Category.Id,
                 Unit = product.Unit,
-                Stock = (product.Stock == null) ? 0 : (int)(product.Stock.Inventory)
+                Input = product.Stock.Input,
+                Output = product.Stock.Output,
+                Inventory = product.Stock.Inventory
+            };
+        }
+
+        public Product Create(ProductModel model)
+        {
+            Stock stock = _unitOfWork.Stocks.Get(model.Id);
+            stock.Input = model.Input;
+            stock.Output = model.Output;
+            return new Product()
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Price = model.Price,
+                Unit = model.Unit,
+                Category = _unitOfWork.Categories.Get(model.CategoryId),
+                Stock = stock
             };
         }
 
@@ -138,6 +174,17 @@ namespace Billing.Api.Models
             };
         }
 
+        public Shipper Create(ShipperModel model)
+        {
+            return new Shipper()
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Town = _unitOfWork.Towns.Get(model.TownId)
+            };
+        }
+
         public SupplierModel Create(Supplier supplier)
         {
             return new SupplierModel()
@@ -150,6 +197,17 @@ namespace Billing.Api.Models
             };
         }
 
+        public Supplier Create(SupplierModel model)
+        {
+            return new Supplier()
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Address = model.Address,
+                Town = _unitOfWork.Towns.Get(model.TownId)
+            };
+        }
+
         public TownModel Create(Town town)
         {
             return new TownModel()
@@ -157,7 +215,19 @@ namespace Billing.Api.Models
                 Id = town.Id,
                 Zip = town.Zip,
                 Name = town.Name,
-                Region = town.Region.ToString()
+                Region = town.Region.ToString(),
+                RegionId = (int)town.Region
+            };
+        }
+
+        public Town Create(TownModel model)
+        {
+            return new Town()
+            {
+                Id = model.Id,
+                Zip = model.Zip,
+                Name = model.Name,
+                Region = (Region)model.RegionId
             };
         }
     }

@@ -44,13 +44,14 @@ namespace Billing.Api.Controllers
         }
 
         [Route("")]
-        public IHttpActionResult Post([FromBody]Agent agent)
+        public IHttpActionResult Post(AgentModel model)
         {
             try
             {
+                Agent agent = Factory.Create(model);
                 UnitOfWork.Agents.Insert(agent);
-                UnitOfWork.Commit();
-                return Ok(agent);
+                UnitOfWork.Agents.Commit();
+                return Ok(Factory.Create(agent));
             }
             catch(Exception ex)
             {
@@ -58,14 +59,30 @@ namespace Billing.Api.Controllers
             }
         }
 
-        [Route("{id}")]
-        public IHttpActionResult Put([FromUri] int id, [FromBody]Agent agent)
+        [Route("{id:int}")]
+        public IHttpActionResult Put(int id, AgentModel model)
         {
             try
             {
+                Agent agent = Factory.Create(model);
                 UnitOfWork.Agents.Update(agent, id);
-                UnitOfWork.Commit();
-                return Ok(agent);
+                UnitOfWork.Agents.Commit();
+                return Ok(Factory.Create(agent));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("{id:int}")]
+        public IHttpActionResult Delete(int id)
+        {
+            try
+            {
+                UnitOfWork.Agents.Delete(id);
+                UnitOfWork.Agents.Commit();
+                return Ok();
             }
             catch (Exception ex)
             {

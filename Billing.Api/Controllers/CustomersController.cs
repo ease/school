@@ -44,7 +44,7 @@ namespace Billing.Api.Controllers
         }
 
         [Route("")]
-        public IHttpActionResult Post([FromBody] CustomerModel model)
+        public IHttpActionResult Post(CustomerModel model)
         {
             try
             {
@@ -53,14 +53,14 @@ namespace Billing.Api.Controllers
                 UnitOfWork.Commit();
                 return Ok(Factory.Create(customer));
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
         [Route("{id}")]
-        public IHttpActionResult Put(int id, [FromBody] CustomerModel model)
+        public IHttpActionResult Put(int id, CustomerModel model)
         {
             try
             {

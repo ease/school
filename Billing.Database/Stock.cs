@@ -5,6 +5,7 @@ namespace Billing.Database
 {
     public class Stock : Basic
     {
+        [ForeignKey("Product")]
         public int Id { get; set; }
         public double Input { get; set; }
         public double Output { get; set; }
