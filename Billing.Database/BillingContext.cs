@@ -31,7 +31,7 @@ namespace Billing.Database
             modelBuilder.Entity<Agent>().Map<Agent>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
             modelBuilder.Entity<Category>().Map<Category>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
             modelBuilder.Entity<Customer>().Map<Customer>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
-            modelBuilder.Entity<Invoice>().Map<Invoice>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<Invoice>().Map<Invoice>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted).HasOptional(s => s.Shipper);
             modelBuilder.Entity<Item>().Map<Item>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
             modelBuilder.Entity<Procurement>().Map<Procurement>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
             modelBuilder.Entity<Product>().Map<Product>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
