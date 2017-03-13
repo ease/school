@@ -1,9 +1,5 @@
 ﻿using Billing.Database;
-using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
-using System.Data.Entity.Core.Metadata.Edm;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace Billing.Repository
@@ -19,7 +15,7 @@ namespace Billing.Repository
             dbSet = context.Set<Entity>();
         }
 
-        public IQueryable<Entity> Get()
+        public virtual IQueryable<Entity> Get()
         {
             return dbSet;
         }

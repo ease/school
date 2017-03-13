@@ -191,7 +191,7 @@ namespace Billing.Api.Models
 
         public Product Create(ProductModel model)
         {
-            Stock stock = _unitOfWork.Stocks.Get(model.Id);
+            Stock stock = (model.Id == 0) ? new Stock() : _unitOfWork.Stocks.Get(model.Id);
             stock.Input = model.Input;
             stock.Output = model.Output;
             return new Product()

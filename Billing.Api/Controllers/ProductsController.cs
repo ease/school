@@ -2,6 +2,7 @@
 using Billing.Database;
 using Billing.Repository;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
@@ -75,6 +76,21 @@ namespace Billing.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [Route("stock")]
+        [HttpGet]
+        public IHttpActionResult Leverage()
+        {
+            List<Product> products = UnitOfWork.Products.Get().ToList();
+            foreach (Product product in products)
+            {
+                product.Stock.Input = product.Procurements.Sum(x => x.Quantity);
+                product.Stock.Output = product.Items.Sum(x => x.Quantity);
+                UnitOfWork.Products.Update(product, product.Id);
+            }
+            UnitOfWork.Commit();
+            return Ok("Inventory leveraged for all products.");
         }
     }
 }
