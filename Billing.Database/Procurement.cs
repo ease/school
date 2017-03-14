@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Billing.Database
@@ -13,7 +14,9 @@ namespace Billing.Database
         [NotMapped]
         public double Total { get { return Quantity * Price; } }
 
+        [Required]
         public virtual Supplier Supplier { get; set; }
+        [Required]
         public virtual Product Product { get; set; }
     }
 }

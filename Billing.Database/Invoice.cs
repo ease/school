@@ -34,9 +34,13 @@ namespace Billing.Database
         [NotMapped]
         public double Total { get { return (SubTotal + VatAmount + Shipping); } }
 
+        [Required]
         public virtual Agent Agent { get; set; }
+        [Required]
         public virtual Customer Customer { get; set; }
+        [Required]
         public virtual Shipper Shipper { get; set; }
+
         public virtual List<Item> Items { get; set; }
     }
 }
