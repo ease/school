@@ -30,7 +30,8 @@ namespace Billing.Tests
         [TestMethod]
         public void GetAllCategories()
         {
-            TestHelper.InitDatabase(); GetReady();
+            TestHelper.InitDatabase();
+            GetReady();
             var actRes = controller.Get();
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
