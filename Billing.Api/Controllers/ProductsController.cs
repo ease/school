@@ -68,6 +68,9 @@ namespace Billing.Api.Controllers
         {
             try
             {
+                Product product = UnitOfWork.Products.Get(id);
+                if (product == null) return NotFound();
+                UnitOfWork.Stocks.Delete(id);
                 UnitOfWork.Products.Delete(id);
                 UnitOfWork.Commit();
                 return Ok();

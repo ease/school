@@ -11,16 +11,16 @@ using Billing.Api.Models;
 namespace Billing.Tests
 {
     [TestClass]
-    public class TestProductsController
+    public class TestCategoriesController
     {
-        ProductsController controller = new ProductsController();
+        CategoriesController controller = new CategoriesController();
         HttpConfiguration config = new HttpConfiguration();
-        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/products");
+        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/categories");
 
         void GetReady()
         {
             var route = config.Routes.MapHttpRoute("default", "api/{controller}/{id}");
-            var routeData = new HttpRouteData(route, new HttpRouteValueDictionary { { "controller", "products" } });
+            var routeData = new HttpRouteData(route, new HttpRouteValueDictionary { { "controller", "categories" } });
 
             controller.ControllerContext = new HttpControllerContext(config, routeData, request);
             controller.Request = request;
@@ -28,7 +28,7 @@ namespace Billing.Tests
         }
 
         [TestMethod]
-        public void GetAllProducts()
+        public void GetAllCategories()
         {
             TestHelper.InitDatabase(); GetReady();
             var actRes = controller.Get();
@@ -38,7 +38,7 @@ namespace Billing.Tests
         }
 
         [TestMethod]
-        public void GetProductById()
+        public void GetCategoryById()
         {
             GetReady();
             var actRes = controller.Get(1);
@@ -48,7 +48,7 @@ namespace Billing.Tests
         }
 
         [TestMethod]
-        public void GetProductByWrongId()
+        public void GetCategoryByWrongId()
         {
             GetReady();
             var actRes = controller.Get(999);
@@ -58,40 +58,20 @@ namespace Billing.Tests
         }
 
         [TestMethod]
-        public void PostProductGood()
+        public void PostCategoryGood()
         {
             GetReady();
-            var actRes = controller.Post(new ProductModel() { Name = "Brand new product", Unit = "pcs", Price = 100, CategoryId = 1 });
+            var actRes = controller.Post(new CategoryModel() { Name = "Brand new category" });
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsTrue(response.IsSuccessStatusCode);
         }
 
         [TestMethod]
-        public void PostProductBad()
+        public void ChangeCategoryName()
         {
             GetReady();
-            var actRes = controller.Post(new ProductModel() { Name = "Brand new product", Unit = "pcs", Price = 100, CategoryId = 999 });
-            var response = actRes.ExecuteAsync(CancellationToken.None).Result;
-
-            Assert.IsFalse(response.IsSuccessStatusCode);
-        }
-
-        [TestMethod]
-        public void ChangeProductName()
-        {
-            GetReady();
-            var actRes = controller.Put(1, new ProductModel() { Id = 1, Name = "New name for old product", Unit = "pcs", Price = 100, CategoryId = 1 });
-            var response = actRes.ExecuteAsync(CancellationToken.None).Result;
-
-            Assert.IsTrue(response.IsSuccessStatusCode);
-        }
-
-        [TestMethod]
-        public void ChangeCategory()
-        {
-            GetReady();
-            var actRes = controller.Put(1, new ProductModel() { Id = 1, Name = "Brand new product", Unit = "pcs", Price = 100, CategoryId = 2 });
+            var actRes = controller.Put(1, new CategoryModel() { Id = 1, Name = "New name for old category" });
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsTrue(response.IsSuccessStatusCode);
@@ -101,7 +81,7 @@ namespace Billing.Tests
         public void DeleteByWrongId()
         {
             GetReady();
-            var actRes = controller.Delete(999);
+            var actRes = controller.Delete(1);
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsFalse(response.IsSuccessStatusCode);
@@ -111,7 +91,7 @@ namespace Billing.Tests
         public void DeleteById()
         {
             GetReady();
-            var actRes = controller.Delete(1);
+            var actRes = controller.Delete(2);
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsNull(response.Content);
