@@ -16,7 +16,7 @@ namespace Billing.Tests
         CategoriesController controller = new CategoriesController();
         HttpConfiguration config = new HttpConfiguration();
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/categories");
-
+        
         void GetReady()
         {
             var route = config.Routes.MapHttpRoute("default", "api/{controller}/{id}");
