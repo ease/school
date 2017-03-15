@@ -51,7 +51,7 @@ namespace Billing.Tests
         public void GetProductByWrongId()
         {
             GetReady();
-            var actRes = controller.Get(999);
+            var actRes = controller.Get(99);
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsNull(response.Content);
@@ -61,7 +61,7 @@ namespace Billing.Tests
         public void PostProductGood()
         {
             GetReady();
-            var actRes = controller.Post(new ProductModel() { Name = "Brand new product", Unit = "pcs", Price = 100, CategoryId = 1 });
+            var actRes = controller.Post(new ProductModel() { Name = "New computer arrived", Unit = "pcs", Price = 800, CategoryId = 1 });
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsTrue(response.IsSuccessStatusCode);
@@ -71,7 +71,7 @@ namespace Billing.Tests
         public void PostProductBad()
         {
             GetReady();
-            var actRes = controller.Post(new ProductModel() { Name = "Brand new product", Unit = "pcs", Price = 100, CategoryId = 999 });
+            var actRes = controller.Post(new ProductModel() { Name = "Bad computer arrived", Unit = "pcs", Price = 800, CategoryId = 99 });
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsFalse(response.IsSuccessStatusCode);
@@ -81,7 +81,7 @@ namespace Billing.Tests
         public void ChangeProductName()
         {
             GetReady();
-            var actRes = controller.Put(1, new ProductModel() { Id = 1, Name = "New name for old product", Unit = "pcs", Price = 100, CategoryId = 1 });
+            var actRes = controller.Put(1, new ProductModel() { Id = 1, Name = "Computer ACER", Unit = "pcs", Price = 400, CategoryId = 1 });
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsTrue(response.IsSuccessStatusCode);
@@ -91,7 +91,7 @@ namespace Billing.Tests
         public void ChangeCategory()
         {
             GetReady();
-            var actRes = controller.Put(1, new ProductModel() { Id = 1, Name = "Brand new product", Unit = "pcs", Price = 100, CategoryId = 2 });
+            var actRes = controller.Put(1, new ProductModel() { Id = 1, Name = "Categery changed", Unit = "pcs", Price = 400, CategoryId = 2 });
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsTrue(response.IsSuccessStatusCode);
@@ -101,20 +101,30 @@ namespace Billing.Tests
         public void DeleteByWrongId()
         {
             GetReady();
-            var actRes = controller.Delete(999);
+            var actRes = controller.Delete(99);
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsFalse(response.IsSuccessStatusCode);
         }
 
         [TestMethod]
-        public void DeleteById()
+        public void DeleteSingle()
+        {
+            GetReady();
+            var actRes = controller.Delete(2);
+            var response = actRes.ExecuteAsync(CancellationToken.None).Result;
+
+            Assert.IsTrue(response.IsSuccessStatusCode);
+        }
+
+        [TestMethod]
+        public void DeleteWidow()
         {
             GetReady();
             var actRes = controller.Delete(1);
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
-            Assert.IsNull(response.Content);
+            Assert.IsFalse(response.IsSuccessStatusCode);
         }
     }
 }

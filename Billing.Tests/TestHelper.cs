@@ -34,11 +34,16 @@ namespace Billing.Tests
             unit.Commit();
 
             unit.Categories.Insert(new Category() { Name = "Desktop" });
-            unit.Categories.Insert(new Category() { Name = "Desktop" });
+            unit.Categories.Insert(new Category() { Name = "Laptop" });
             unit.Commit();
 
             unit.Products.Insert(new Product() { Name = "Racunar Dell 2866", Unit = "pcs", Price = 700, Category = unit.Categories.Get(1) });
-            unit.Products.Insert(new Product() { Name = "Laptop Dell 2866", Unit = "pcs", Price = 699, Category = unit.Categories.Get(2) });
+            unit.Products.Insert(new Product() { Name = "Laptop Dell 2866", Unit = "pcs", Price = 699, Category = unit.Categories.Get(1) });
+            unit.Commit();
+
+            unit.Stocks.Insert(new Stock() { Id = 1, Input = 4, Output = 2 });
+            unit.Stocks.Insert(new Stock() { Id = 2, Input = 3, Output = 1 });
+            unit.Commit();
 
             unit.Invoices.Insert(new Invoice()
             {
@@ -67,7 +72,7 @@ namespace Billing.Tests
             unit.Commit();
 
             unit.Items.Insert(new Item() { Invoice = unit.Invoices.Get(1), Product = unit.Products.Get(1), Price = 700, Quantity = 1 });
-            unit.Items.Insert(new Item() { Invoice = unit.Invoices.Get(1), Product = unit.Products.Get(2), Price = 699, Quantity = 1 });
+            unit.Items.Insert(new Item() { Invoice = unit.Invoices.Get(1), Product = unit.Products.Get(1), Price = 699, Quantity = 1 });
             unit.Items.Insert(new Item() { Invoice = unit.Invoices.Get(2), Product = unit.Products.Get(1), Price = 700, Quantity = 1 });
             unit.Commit();
 
@@ -84,7 +89,7 @@ namespace Billing.Tests
             {
                 Document = "2055-2",
                 Date = new DateTime(2017, 1, 11),
-                Product = unit.Products.Get(2),
+                Product = unit.Products.Get(1),
                 Supplier = unit.Suppliers.Get(1),
                 Quantity = 2,
                 Price = 699

@@ -42,8 +42,8 @@ namespace Billing.Tests
         public void GetCategoryById()
         {
             GetReady();
-            var actRes = controller.Get(1);
-            var response = actRes.ExecuteAsync(CancellationToken.None).Result;
+            //var actRes = ;
+            var response = controller.Get(1).ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsNotNull(response.Content);
         }
@@ -52,7 +52,7 @@ namespace Billing.Tests
         public void GetCategoryByWrongId()
         {
             GetReady();
-            var actRes = controller.Get(999);
+            var actRes = controller.Get(99);
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsNull(response.Content);
@@ -62,7 +62,7 @@ namespace Billing.Tests
         public void PostCategoryGood()
         {
             GetReady();
-            var actRes = controller.Post(new CategoryModel() { Name = "Brand new category" });
+            var actRes = controller.Post(new CategoryModel() { Name = "Monitor" });
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsTrue(response.IsSuccessStatusCode);
@@ -72,7 +72,7 @@ namespace Billing.Tests
         public void ChangeCategoryName()
         {
             GetReady();
-            var actRes = controller.Put(1, new CategoryModel() { Id = 1, Name = "New name for old category" });
+            var actRes = controller.Put(1, new CategoryModel() { Id = 1, Name = "Desktop computers" });
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
             Assert.IsTrue(response.IsSuccessStatusCode);
@@ -95,7 +95,7 @@ namespace Billing.Tests
             var actRes = controller.Delete(2);
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 
-            Assert.IsNull(response.Content);
+            Assert.IsTrue(response.IsSuccessStatusCode);
         }
     }
 }
