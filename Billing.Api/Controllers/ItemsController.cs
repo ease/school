@@ -16,6 +16,18 @@ namespace Billing.Api.Controllers
             return Ok(UnitOfWork.Items.Get().ToList().Select(x => Factory.Create(x)).ToList());
         }
 
+        [Route("product/{id}")]
+        public IHttpActionResult GetByProduct(int id)
+        {
+            return Ok(UnitOfWork.Items.Get().Where(x => x.Product.Id == id).ToList().Select(x => Factory.Create(x)).ToList());
+        }
+
+        [Route("invoice/{id}")]
+        public IHttpActionResult GetByInvoice(int id)
+        {
+            return Ok(UnitOfWork.Items.Get().Where(x => x.Invoice.Id == id).ToList().Select(x => Factory.Create(x)).ToList());
+        }
+
         [Route("{id:int}")]
         public IHttpActionResult Get(int id)
         {
@@ -74,6 +86,8 @@ namespace Billing.Api.Controllers
         {
             try
             {
+                Item entity = UnitOfWork.Items.Get(id);
+                if (entity == null) return NotFound();
                 UnitOfWork.Items.Delete(id);
                 UnitOfWork.Commit();
                 return Ok();

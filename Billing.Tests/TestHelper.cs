@@ -47,7 +47,7 @@ namespace Billing.Tests
 
             unit.Invoices.Insert(new Invoice()
             {
-                InvoiceNo = "100/17",
+                InvoiceNo = "100-17",
                 Date = new DateTime(2017, 1, 10),
                 ShippedOn = new DateTime(2017, 1, 18),
                 Vat = 17,
@@ -59,7 +59,7 @@ namespace Billing.Tests
             });
             unit.Invoices.Insert(new Invoice()
             {
-                InvoiceNo = "101/17",
+                InvoiceNo = "101-17",
                 Date = new DateTime(2017, 2, 18),
                 ShippedOn = new DateTime(2017, 2, 28),
                 Vat = 17,
@@ -73,12 +73,12 @@ namespace Billing.Tests
 
             unit.Items.Insert(new Item() { Invoice = unit.Invoices.Get(1), Product = unit.Products.Get(1), Price = 700, Quantity = 1 });
             unit.Items.Insert(new Item() { Invoice = unit.Invoices.Get(1), Product = unit.Products.Get(1), Price = 699, Quantity = 1 });
-            unit.Items.Insert(new Item() { Invoice = unit.Invoices.Get(2), Product = unit.Products.Get(1), Price = 700, Quantity = 1 });
+            unit.Items.Insert(new Item() { Invoice = unit.Invoices.Get(1), Product = unit.Products.Get(1), Price = 700, Quantity = 1 });
             unit.Commit();
 
             unit.Procurements.Insert(new Procurement()
             {
-                Document = "55/17",
+                Document = "55-17",
                 Date = new DateTime(2017, 1, 5),
                 Product = unit.Products.Get(1),
                 Supplier = unit.Suppliers.Get(1),

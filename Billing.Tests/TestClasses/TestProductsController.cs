@@ -17,9 +17,9 @@ namespace Billing.Tests
         HttpConfiguration config = new HttpConfiguration();
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/products");
 
-        void GetReady()
+        void GetReady(string currentRoute = "api/{controller}/{id}")
         {
-            var route = config.Routes.MapHttpRoute("default", "api/{controller}/{id}");
+            var route = config.Routes.MapHttpRoute("default", currentRoute);
             var routeData = new HttpRouteData(route, new HttpRouteValueDictionary { { "controller", "products" } });
 
             controller.ControllerContext = new HttpControllerContext(config, routeData, request);
@@ -50,7 +50,7 @@ namespace Billing.Tests
         [TestMethod]
         public void GetProductByWrongId()
         {
-            GetReady();
+            GetReady("api/{controller}/name/{name}");
             var actRes = controller.Get(99);
             var response = actRes.ExecuteAsync(CancellationToken.None).Result;
 

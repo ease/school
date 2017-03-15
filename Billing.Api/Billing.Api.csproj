@@ -130,9 +130,9 @@
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\ProcurementsController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
-    <Compile Include="Controllers\ShipperController.cs" />
-    <Compile Include="Controllers\SupplierController.cs" />
-    <Compile Include="Controllers\TownController.cs" />
+    <Compile Include="Controllers\ShippersController.cs" />
+    <Compile Include="Controllers\SuppliersController.cs" />
+    <Compile Include="Controllers\TownsController.cs" />
     <Compile Include="Models\ProcurementModel.cs" />
     <Compile Include="Models\ShipperModel.cs" />
     <Compile Include="Global.asax.cs">

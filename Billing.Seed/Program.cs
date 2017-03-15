@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Billing.Repository;
+using System;
 
 namespace Billing.Seed
 {
-    class Program
+    public class Program
     {
-
         static void Main(string[] args)
         {
             Console.WriteLine("Data migration in progress");

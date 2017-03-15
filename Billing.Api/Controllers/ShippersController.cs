@@ -79,6 +79,8 @@ namespace Billing.Api.Controllers
         {
             try
             {
+                Shipper entity = UnitOfWork.Shippers.Get(id);
+                if (entity == null) return NotFound();
                 UnitOfWork.Shippers.Delete(id);
                 UnitOfWork.Commit();
                 return Ok();

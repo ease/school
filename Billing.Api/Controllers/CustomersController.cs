@@ -80,6 +80,8 @@ namespace Billing.Api.Controllers
         {
             try
             {
+                Customer entity = UnitOfWork.Customers.Get(id);
+                if (entity == null) return NotFound();
                 UnitOfWork.Customers.Delete(id);
                 UnitOfWork.Commit();
                 return Ok();

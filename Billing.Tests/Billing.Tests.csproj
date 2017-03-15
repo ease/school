@@ -63,9 +63,16 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestCategoriesController.cs" />
+    <Compile Include="TestClasses\TestAgentsController.cs" />
+    <Compile Include="TestClasses\TestCategoriesController.cs" />
+    <Compile Include="TestClasses\TestCustomersController.cs" />
+    <Compile Include="TestClasses\TestInvoicesController.cs" />
+    <Compile Include="TestClasses\TestItemsController.cs" />
+    <Compile Include="TestClasses\TestProcurementsController.cs" />
+    <Compile Include="TestClasses\TestShippersController.cs" />
+    <Compile Include="TestClasses\TestSuppliersController.cs" />
     <Compile Include="TestHelper.cs" />
-    <Compile Include="TestProductsController.cs" />
+    <Compile Include="TestClasses\TestProductsController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -84,10 +91,31 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="OrderedTests\Agents.orderedtest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="OrderedTests\Categories.orderedtest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="OrderedTests\Customers.orderedtest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="OrderedTests\Invoices.orderedtest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="OrderedTests\Items.orderedtest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="OrderedTests\Procurements.orderedtest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="OrderedTests\Products.orderedtest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="OrderedTests\Shippers.orderedtest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="OrderedTests\Suppliers.orderedtest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

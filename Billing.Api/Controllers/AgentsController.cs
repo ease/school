@@ -80,6 +80,8 @@ namespace Billing.Api.Controllers
         {
             try
             {
+                Agent agent = UnitOfWork.Agents.Get(id);
+                if (agent == null) return NotFound();
                 UnitOfWork.Agents.Delete(id);
                 UnitOfWork.Agents.Commit();
                 return Ok();
