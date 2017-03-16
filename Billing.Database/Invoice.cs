@@ -16,7 +16,7 @@ namespace Billing.Database
         public string InvoiceNo { get; set; }
         public DateTime Date { get; set; }
         public DateTime ShippedOn { get; set; }
-        public int Status { get; set; }
+        public Status Status { get; set; }
         [NotMapped]
         public double SubTotal
         {
@@ -24,15 +24,15 @@ namespace Billing.Database
             {
                 double sum = 0;
                 foreach (Item item in Items) sum += item.SubTotal;
-                return sum;
+                return Math.Round(sum, 2);
             }
         }
         public double Vat { get; set; }
         [NotMapped]
-        public double VatAmount { get { return (SubTotal * Vat / 100); } }
+        public double VatAmount { get { return Math.Round(SubTotal * Vat / 100, 2); } }
         public double Shipping { get; set; }
         [NotMapped]
-        public double Total { get { return (SubTotal + VatAmount + Shipping); } }
+        public double Total { get { return Math.Round(SubTotal + VatAmount + Shipping, 2); } }
 
         [Required]
         public virtual Agent Agent { get; set; }

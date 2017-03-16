@@ -12,7 +12,7 @@ namespace Billing.Database
         public int Quantity { get; set; }
         public double Price { get; set; }
         [NotMapped]
-        public double Total { get { return Quantity * Price; } }
+        public double Total { get { return Math.Round(Quantity * Price, 2); } }
 
         [Required]
         public virtual Supplier Supplier { get; set; }

@@ -9,6 +9,7 @@ using System.Web.Http.Hosting;
 using Billing.Api.Models;
 using System;
 using System.Collections.Generic;
+using Billing.Database;
 
 namespace Billing.Tests
 {
@@ -105,7 +106,7 @@ namespace Billing.Tests
                 ShipperId = 1,
                 Date = new DateTime(2017, 1, 20),
                 InvoiceNo = "556-77",
-                Status = 2,
+                StatusId = 2,
                 ShippedOn = new DateTime(2017, 1, 22),
                 Shipping = 49,
                 Vat = 17
@@ -125,7 +126,7 @@ namespace Billing.Tests
                 ShipperId = 99,
                 Date = new DateTime(2017, 1, 20),
                 InvoiceNo = "556-77",
-                Status = 2,
+                StatusId = 2,
                 ShippedOn = new DateTime(2017, 1, 22),
                 Shipping = 49,
                 Vat = 17
@@ -146,7 +147,7 @@ namespace Billing.Tests
                 ShipperId = 2,
                 Date = new DateTime(2017, 1, 20),
                 InvoiceNo = "77-588",
-                Status = 1,
+                StatusId = 5,
                 ShippedOn = new DateTime(2017, 1, 22),
                 Shipping = 94,
                 Vat = 17
@@ -167,7 +168,7 @@ namespace Billing.Tests
                 ShipperId = 99,
                 Date = new DateTime(2017, 1, 20),
                 InvoiceNo = "77-588",
-                Status = 1,
+                StatusId = 6,
                 ShippedOn = new DateTime(2017, 1, 22),
                 Shipping = 94,
                 Vat = 17
