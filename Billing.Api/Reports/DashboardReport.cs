@@ -24,19 +24,15 @@ namespace Billing.Api.Reports
 
             var listAnnual = UnitOfWork.Invoices.Get().ToList()
                     .GroupBy(x => new { x.Customer.Town.Region, x.Date.Month })
-                    .Select(x => new {
-                        label = x.Key.Region.ToString(),
-                        month = x.Key.Month,
-                        sales = x.Sum(y => (y.Total))
-                    }).ToList();
+                    .Select(x => new { label = x.Key.Region.ToString(), month = x.Key.Month, sales = x.Sum(y => (y.Total)) })
+                    .ToList();
 
             AnnualSales currentYear = new AnnualSales();
             foreach (var item in listAnnual)
             {
                 if (item.label != currentYear.Label)
                 {
-                    if (currentYear.Label != null)
-                        result.RegionsYear.Add(currentYear);
+                    if (currentYear.Label != null) result.RegionsYear.Add(currentYear);
                     currentYear = new AnnualSales();
                     currentYear.Label = item.label;
                 }
@@ -47,11 +43,8 @@ namespace Billing.Api.Reports
             var listCategories = UnitOfWork.Items.Get()
                                 .OrderBy(x => x.Product.Category.Id).ToList()
                                 .GroupBy(x => new { x.Product.Category.Name, x.Invoice.Date.Month })
-                                .Select(x => new {
-                                    category = x.Key.Name,
-                                    month = x.Key.Month,
-                                    sales = x.Sum(y => y.SubTotal)
-                                }).ToList();
+                                .Select(x => new { category = x.Key.Name, month = x.Key.Month, sales = x.Sum(y => y.SubTotal) })
+                                .ToList();
             currentYear = new AnnualSales();
             foreach (var item in listCategories)
             {
@@ -70,7 +63,6 @@ namespace Billing.Api.Reports
                             .GroupBy(x => new { agent = x.Agent.Name, region = x.Customer.Town.Region })
                             .Select(x => new { label = x.Key.agent, region = (int)x.Key.region, sales = x.Sum(y => (y.Total)) })
                             .ToList();
-
             AgentsSales currentAgent = new AgentsSales((int)Region.Zenica);
             foreach (var item in listAgents)
             {
