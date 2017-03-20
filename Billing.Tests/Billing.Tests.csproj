@@ -66,6 +66,7 @@
     <Compile Include="TestClasses\TestAgentsController.cs" />
     <Compile Include="TestClasses\TestCategoriesController.cs" />
     <Compile Include="TestClasses\TestCustomersController.cs" />
+    <Compile Include="TestClasses\TestDashboardController.cs" />
     <Compile Include="TestClasses\TestInvoicesController.cs" />
     <Compile Include="TestClasses\TestItemsController.cs" />
     <Compile Include="TestClasses\TestProcurementsController.cs" />
