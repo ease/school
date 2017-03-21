@@ -1,4 +1,5 @@
-﻿using Billing.Api.Models;
+﻿using Billing.Api.Helpers;
+using Billing.Api.Models;
 using Billing.Database;
 using Billing.Repository;
 using System;
@@ -7,6 +8,7 @@ using System.Web.Http;
 
 namespace Billing.Api.Controllers
 {
+    [BillingAuthorization]
     [RoutePrefix("api/customers")]
     public class CustomersController : BaseController
     {

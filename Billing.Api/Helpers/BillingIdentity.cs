@@ -1,4 +1,6 @@
-﻿namespace Billing.Api.Helpers
+﻿using System.Threading;
+
+namespace Billing.Api.Helpers
 {
     public class BillingIdentity
     {
@@ -6,8 +8,8 @@
         {
             get
             {
-                return "marlon";
-                //return Thread.CurrentPrincipal.Identity.Name;
+                //return "marlon";
+                return Thread.CurrentPrincipal.Identity.Name;
             }
         }
     }
