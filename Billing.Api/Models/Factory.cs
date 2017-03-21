@@ -274,5 +274,14 @@ namespace Billing.Api.Models
                 Region = (Region)model.RegionId
             };
         }
+
+        public TokenModel Create(AuthToken authToken)
+        {
+            return new Models.TokenModel()
+            {
+                Token = authToken.Token,
+                Expiration = authToken.Expiration
+            };
+        }
     }
 }

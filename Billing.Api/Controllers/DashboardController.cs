@@ -1,23 +1,20 @@
-﻿using Billing.Api.Models;
+﻿using Billing.Api.Helpers;
 using Billing.Api.Reports;
-using Billing.Database;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace Billing.Api.Controllers
 {
+    [BillingAuthorization]
     public class DashboardController : BaseController
     {
+        private BillingIdentity identity = new BillingIdentity();
+
         public IHttpActionResult Get()
         {
             try
             {
-                return Ok(DashboardReport.Report(UnitOfWork));
+                return Ok(DashboardReport.Report(UnitOfWork, identity.currentUser));
             }
             catch(Exception ex)
             {

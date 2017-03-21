@@ -4,6 +4,7 @@ using Billing.Repository;
 using System;
 using System.Linq;
 using System.Web.Http;
+using WebMatrix.WebData;
 
 namespace Billing.Api.Controllers
 {
@@ -90,6 +91,19 @@ namespace Billing.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [Route("profiles")]
+        [HttpGet]
+        public IHttpActionResult CreateProfiles()
+        {
+            WebSecurity.InitializeDatabaseConnection("Billing", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+            foreach (var agent in UnitOfWork.Agents.Get())
+            {
+                string[] names = agent.Name.Split(' ');
+                WebSecurity.CreateUserAndAccount(names[0], "billing", false);
+            }
+            return Ok("user profiles created");
         }
     }
 }

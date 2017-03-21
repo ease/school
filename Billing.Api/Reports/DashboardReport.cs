@@ -2,19 +2,19 @@
 using Billing.Database;
 using Billing.Repository;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Web;
 
 namespace Billing.Api.Reports
 {
     public static class DashboardReport
     {
-        public static DashboardModel Report(UnitOfWork UnitOfWork)
+        public static DashboardModel Report(UnitOfWork UnitOfWork, string currentUser)
         {
             int currentMonth = Convert.ToInt32(ConfigurationManager.AppSettings["currentMonth"]);
             DashboardModel result = new DashboardModel((int)Status.Delivered, (int)Region.Zenica);
+
+            result.Title = "Dashboard for " + currentUser;
 
             result.RegionsMonth = UnitOfWork.Invoices.Get()
                     .Where(x => x.Date.Month == currentMonth).ToList()

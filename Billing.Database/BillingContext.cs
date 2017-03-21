@@ -14,6 +14,8 @@ namespace Billing.Database
     {
         public BillingContext() : base("name=Billing") { }
 
+        public DbSet<ApiUser> ApiUsers { get; set; }
+        public DbSet<AuthToken> Tokens { get; set; }
         public DbSet<Agent> Agents { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Customer> Customers { get; set; }
@@ -32,6 +34,8 @@ namespace Billing.Database
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
 
             modelBuilder.Ignore<Basic>();
+            modelBuilder.Entity<ApiUser>().Map<ApiUser>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<AuthToken>().Map<AuthToken>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
             modelBuilder.Entity<Agent>().Map<Agent>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
             modelBuilder.Entity<Category>().Map<Category>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
             modelBuilder.Entity<Customer>().Map<Customer>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
