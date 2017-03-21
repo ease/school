@@ -5,7 +5,7 @@ using System.Web.Http;
 
 namespace Billing.Api.Controllers
 {
-    [BillingAuthorization]
+    [TokenAuthorization]
     public class DashboardController : BaseController
     {
         private BillingIdentity identity = new BillingIdentity();
