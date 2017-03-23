@@ -5,16 +5,13 @@ using System.Web.Http;
 
 namespace Billing.Api.Controllers
 {
-    [TokenAuthorization]
     public class DashboardController : BaseController
     {
-        private BillingIdentity identity = new BillingIdentity();
-
         public IHttpActionResult Get()
         {
             try
             {
-                return Ok(DashboardReport.Report(UnitOfWork, identity.currentUser));
+                return Ok(Reports.Dashboard.Report());
             }
             catch(Exception ex)
             {

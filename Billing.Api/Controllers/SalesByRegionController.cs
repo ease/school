@@ -1,4 +1,5 @@
-﻿using Billing.Api.Models;
+﻿using Billing.Api.Helpers;
+using Billing.Api.Models;
 using Billing.Api.Reports;
 using System;
 using System.Collections.Generic;
@@ -13,15 +14,13 @@ namespace Billing.Api.Controllers
     {
         public IHttpActionResult Post(RequestModel request)
         {
+            try
             {
-                try
-                {
-                    return Ok(SalesByRegionReport.Report(UnitOfWork, request));
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                return Ok(Reports.SalesByRegion.Report(request));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

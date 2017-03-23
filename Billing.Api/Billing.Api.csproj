@@ -219,6 +219,8 @@
     <Compile Include="Models\TokenRequestModel.cs" />
     <Compile Include="Models\TownModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\ReportFactory.cs" />
+    <Compile Include="Reports\SetOfReports.cs" />
     <Compile Include="Reports\DashboardReport.cs" />
     <Compile Include="Reports\SalesByRegionReport.cs" />
   </ItemGroup>

@@ -4,45 +4,36 @@ using Billing.Database;
 using System;
 using System.Linq;
 using System.Security.Principal;
+using System.Text;
 using System.Threading;
 using System.Web.Http;
 using WebMatrix.WebData;
 
 namespace Billing.Api.Controllers
 {
+    [BillingAuthorization]
     public class LoginController : BaseController
     {
         private BillingIdentity identity = new BillingIdentity();
 
         [Route("api/login")]
         [HttpPost]
-        public IHttpActionResult Login(string credentials, TokenRequestModel request)
+        public IHttpActionResult Login(TokenRequestModel request)
         {
             ApiUser apiUser = UnitOfWork.ApiUsers.Get().FirstOrDefault(x => x.AppId == request.ApiKey);
             if (apiUser == null) return NotFound();
-            if (Helper.Signature(apiUser.Secret, apiUser.AppId) != request.Signature)
-                return BadRequest("Bad application signature");
+            if (Helper.Signature(apiUser.Secret, apiUser.AppId) != request.Signature) return BadRequest("Bad application signature");
 
-            if (!WebSecurity.Initialized) WebSecurity.InitializeDatabaseConnection("Billing", "UserProfile", "UserId", "UserName", autoCreateTables: true);
-            string[] user = credentials.Split(':');
-            if (WebSecurity.Login(user[0], user[1]))
+            var rawTokenInfo = apiUser.AppId + DateTime.UtcNow.ToString("s");
+            var authToken = new AuthToken()
             {
-                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(user[0]), null);
-                var rawTokenInfo = apiUser.AppId + DateTime.UtcNow.ToString("s");
-                var authToken = new AuthToken()
-                {
-                    Token = rawTokenInfo,
-                    Expiration = DateTime.Now.AddMinutes(20),
-                    ApiUser = apiUser
-                };
-                UnitOfWork.Tokens.Insert(authToken);
-                UnitOfWork.Commit();
-                return Ok(Factory.Create(authToken));
-            }
-            else
-            {
-                return Ok($"{user[0]} not logged in");
-            }
+                Token = rawTokenInfo,
+                Expiration = DateTime.Now.AddMinutes(20),
+                ApiUser = apiUser
+            };
+            UnitOfWork.Tokens.Insert(authToken);
+            UnitOfWork.Commit();
+            return Ok(Factory.Create(authToken));
         }
 
         [Route("api/logout")]
@@ -63,6 +54,3 @@ namespace Billing.Api.Controllers
         }
     }
 }
-
-//      http://localhost:9000/api/login?credentials=meril:billing
-//      http://localhost:9000/api/logout

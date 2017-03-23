@@ -8,7 +8,6 @@ namespace Billing.Api.Helpers
         {
             get
             {
-                //return "marlon";
                 return Thread.CurrentPrincipal.Identity.Name;
             }
         }

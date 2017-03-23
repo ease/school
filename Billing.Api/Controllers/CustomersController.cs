@@ -8,13 +8,15 @@ using System.Web.Http;
 
 namespace Billing.Api.Controllers
 {
-    [BillingAuthorization]
+    [TokenAuthorization]
     [RoutePrefix("api/customers")]
     public class CustomersController : BaseController
     {
         [Route("")]
         public IHttpActionResult Get()
         {
+            BillingIdentity identity = new BillingIdentity();
+            string username = identity.currentUser;
             return Ok(UnitOfWork.Customers.Get().ToList().Select(x => Factory.Create(x)).ToList());
         }
 

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Billing.Database;
+using System;
 using System.Reflection;
 using System.Text;
 using System.Web;
@@ -9,8 +8,11 @@ namespace Billing.Api.Helpers
 {
     public static class Helper
     {
-        private static readonly log4net.ILog log = 
-            log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        public static int StatusCount { get { return Enum.GetValues(typeof(Status)).Length; } }
+
+        public static int RegionCount { get { return Enum.GetValues(typeof(Region)).Length; } }
+
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static void Log(string Message, string Level = "ERROR")
         {
@@ -24,7 +26,7 @@ namespace Billing.Api.Helpers
             //if (!url.ToLower().Contains("localhost")) Email.Send(“admin@billing.com", “>> " + Level, Message);
         }
 
-        internal static string Signature(string Secret, string AppId)
+        public static string Signature(string Secret, string AppId)
         {
             byte[] secret = Convert.FromBase64String(Secret);
             byte[] appId = Convert.FromBase64String(AppId);
