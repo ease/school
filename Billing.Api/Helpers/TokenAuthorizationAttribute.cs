@@ -11,6 +11,13 @@ namespace Billing.Api.Helpers
 {
     public class TokenAuthorizationAttribute: AuthorizationFilterAttribute
     {
+        private BillingIdentity Identity = new BillingIdentity();
+        private string[] _role;
+        public TokenAuthorizationAttribute(string role)
+        {
+            _role = role.Split(',');
+        }
+
         public override void OnAuthorization(HttpActionContext actionContext)
         {
             IEnumerable<string> ApiKey = new List<string>();
@@ -20,9 +27,11 @@ namespace Billing.Api.Helpers
 
             if (!(ApiKey == null || Token == null))
             {
-                var authToken = new UnitOfWork().Tokens.Get().FirstOrDefault(x => x.Token == Token.First());
+                var authToken = new UnitOfWork().Tokens.Get().FirstOrDefault(x => x.Token == Token.FirstOrDefault());
                 if (authToken != null)
-                    if (authToken.ApiUser.AppId == ApiKey.First() && authToken.Expiration > DateTime.UtcNow) return;
+                    if (authToken.ApiUser.AppId == ApiKey.First() && authToken.Expiration > DateTime.UtcNow)
+                        foreach(string role in _role)
+                            if (Identity.HasRole(role)) return;
             }
             actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
         }

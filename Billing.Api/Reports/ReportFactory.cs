@@ -45,18 +45,46 @@ namespace Billing.Api.Reports
                 RegionTotal = Sales,
                 RegionPercent = Math.Round(100 * Sales / GrandTotal, 2)
             };
-            region.Agents = Invoices.Where(x => x.Customer.Town.Region.ToString() == Region)
-                           .GroupBy(x => new { id = x.Agent.Id, name = x.Agent.Name })
-                           .Select(x => new AgentSalesModel()
-                           {
-                               AgentId = x.Key.id,
-                               AgentName = x.Key.name,
-                               AgentTotal = x.Sum(y => y.Total),
-                               RegionPercent = 100 * x.Sum(y => y.Total) / Sales,
-                               TotalPercent = 100 * x.Sum(y => y.Total) / GrandTotal
-                           })
-                           .ToList();
+            var q1 = Invoices.Where(x => x.Customer.Town.Region.ToString() == Region);
+            var q2 = q1.GroupBy(x => new { id = x.Agent.Id, name = x.Agent.Name });
+            var q3 = q2.Select(x => new AgentSalesModel()
+            {
+                AgentId = x.Key.id,
+                AgentName = x.Key.name,
+                AgentTotal = x.Sum(y => y.Total),
+                RegionPercent = 100 * x.Sum(y => y.Total) / Sales,
+                TotalPercent = 100 * x.Sum(y => y.Total) / GrandTotal
+            });
+            region.Agents = q3.ToList();
             return region;
+        }
+
+        public List<CustomerStatus> Customers(List<InputItem> list)
+        {
+            List<CustomerStatus> result = new List<CustomerStatus>();
+            CustomerStatus current = new CustomerStatus();
+            foreach (var item in list)
+            {
+                if (item.Label != current.Name)
+                {
+                    if (current.Name != null) result.Add(current);
+                    current = new CustomerStatus();
+                    current.Name = item.Label;
+                }
+                current.Debit += item.Value;
+                if (item.Index > 3) current.Credit += item.Value;
+            }
+            if (current.Name != null) result.Add(current);
+            return result.OrderByDescending(x => x.Debit).ToList();
+        }
+
+        public CustomerStatus Create(int Id, string Name, Status Status, double Amount) {
+            return new CustomerStatus()
+            {
+                Id = Id,
+                Name = Name,
+
+            };
         }
     }
 }

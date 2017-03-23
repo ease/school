@@ -44,7 +44,7 @@ namespace Billing.Api.Controllers
             if (Thread.CurrentPrincipal.Identity.IsAuthenticated)
             {
                 WebSecurity.Logout();
-                return Ok($"User {identity.currentUser} logged out");
+                return Ok($"User {identity.CurrentUser} logged out");
             }
             else
             {
