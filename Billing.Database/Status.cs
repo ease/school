@@ -3,13 +3,12 @@
     public enum Status
     {
         Canceled = -1,
-        Ordered,
-        Confirmed,
+        OrderCreated,
         InvoiceCreated,
         InvoiceSent,
-        InvoicePayed,
-        OnHold,
-        Ready,
-        Delivered
+        InvoicePaid,
+        InvoiceOnHold,
+        InvoiceReady,
+        InvoiceShipped
     }
 }

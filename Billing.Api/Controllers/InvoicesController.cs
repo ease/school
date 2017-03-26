@@ -1,4 +1,5 @@
-﻿using Billing.Api.Models;
+﻿using Billing.Api.Helpers;
+using Billing.Api.Models;
 using Billing.Database;
 using Billing.Repository;
 using System;
@@ -91,6 +92,21 @@ namespace Billing.Api.Controllers
                 UnitOfWork.Invoices.Delete(id);
                 UnitOfWork.Commit();
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("{id}/next/{cancel}")]
+        public IHttpActionResult GetNext(int id, bool cancel = false)
+        {
+            try
+            {
+                InvoiceHelper helper = new InvoiceHelper();
+                Invoice entity = helper.NextStep(UnitOfWork, id, cancel);
+                return Ok(Factory.Create(entity));
             }
             catch (Exception ex)
             {

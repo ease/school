@@ -12,6 +12,7 @@ namespace Billing.Repository
         private IBillingRepository<Agent>     _agents;
         private IBillingRepository<Category>  _categories;
         private CustomersRepository           _customers;
+        private IBillingRepository<Event>     _history;
         private InvoicesRepository            _invoices;
         private ItemsRepository               _items;
         private ProcurementsRepository        _procurements;
@@ -28,6 +29,7 @@ namespace Billing.Repository
         public IBillingRepository<Agent>     Agents       { get { return _agents       ?? (_agents =       new BillingRepository<Agent>(_context)); } }
         public IBillingRepository<Category>  Categories   { get { return _categories   ?? (_categories =   new BillingRepository<Category>(_context)); } }
         public CustomersRepository           Customers    { get { return _customers    ?? (_customers =    new CustomersRepository(_context)); } }
+        public IBillingRepository<Event>     History      { get { return _history      ?? (_history =      new BillingRepository<Event>(_context)); } }
         public InvoicesRepository            Invoices     { get { return _invoices     ?? (_invoices =     new InvoicesRepository(_context)); } }
         public ItemsRepository               Items        { get { return _items        ?? (_items =        new ItemsRepository(_context)); } }
         public ProcurementsRepository        Procurements { get { return _procurements ?? (_procurements = new ProcurementsRepository (_context)); } }

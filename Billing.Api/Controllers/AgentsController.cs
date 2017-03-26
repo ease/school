@@ -1,4 +1,5 @@
-﻿using Billing.Api.Models;
+﻿using Billing.Api.Helpers;
+using Billing.Api.Models;
 using Billing.Database;
 using Billing.Repository;
 using System;
@@ -8,6 +9,7 @@ using WebMatrix.WebData;
 
 namespace Billing.Api.Controllers
 {
+    [TokenAuthorization("admin")]
     [RoutePrefix("api/agents")]
     public class AgentsController : BaseController
     {

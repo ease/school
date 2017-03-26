@@ -19,6 +19,7 @@ namespace Billing.Database
         public DbSet<Agent> Agents { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Event> History { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<Procurement> Procurements { get; set; }
@@ -39,7 +40,8 @@ namespace Billing.Database
             modelBuilder.Entity<Agent>().Map<Agent>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
             modelBuilder.Entity<Category>().Map<Category>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
             modelBuilder.Entity<Customer>().Map<Customer>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
-            modelBuilder.Entity<Invoice>().Map<Invoice>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted).HasOptional(s => s.Shipper);
+            modelBuilder.Entity<Event>().Map<Event>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
+            modelBuilder.Entity<Invoice>().Map<Invoice>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
             modelBuilder.Entity<Item>().Map<Item>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
             modelBuilder.Entity<Procurement>().Map<Procurement>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
             modelBuilder.Entity<Product>().Map<Product>(x => { x.Requires("Deleted").HasValue(false); }).Ignore(x => x.Deleted);
@@ -64,12 +66,9 @@ namespace Billing.Database
             string deletequery = string.Format("UPDATE {0} SET Deleted = 1 WHERE {1} = @id", tableName, primaryKeyName);
 
             Database.ExecuteSqlCommand(deletequery, new SqlParameter("@id", entry.OriginalValues[primaryKeyName]));
-
-            //entry.State = EntityState.Detached;
         }
 
-        private static Dictionary<Type, EntitySetBase> _mappingCache =
-                    new Dictionary<Type, EntitySetBase>();
+        private static Dictionary<Type, EntitySetBase> _mappingCache = new Dictionary<Type, EntitySetBase>();
 
         private EntitySetBase GetEntitySet(Type type)
         {
