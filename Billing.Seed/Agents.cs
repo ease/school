@@ -22,7 +22,7 @@ namespace Billing.Seed
                     Name = Help.getString(row, 1)
                 };
                 N++;
-                string[] Zone = Help.getString(row, 2).Split(',');
+                string[] Zone = Help.getString(row, 2).Split('.');
                 foreach (string Z in Zone)
                 {
                     Region R = (Region)Convert.ToInt32(Z);

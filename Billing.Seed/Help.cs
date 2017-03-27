@@ -12,7 +12,7 @@ namespace Billing.Seed
     public static class Help
     {
         public static BillingContext Context = new BillingContext();
-        public static string SourceRoot = @"C:\Ntg\Billing\billing.xls";
+        public static string SourceRoot = @"C:\Projects\Billing\billing.xls";
 
         public static Dictionary<int, int> dicAgen = new Dictionary<int, int>();
         public static Dictionary<int, int> dicProd = new Dictionary<int, int>();
