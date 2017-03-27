@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using Billing.Repository;
+using System.Linq;
+using System.Threading;
 
 namespace Billing.Api.Helpers
 {
@@ -8,7 +10,9 @@ namespace Billing.Api.Helpers
         {
             get
             {
-                return Thread.CurrentPrincipal.Identity.Name;
+                var username = Thread.CurrentPrincipal.Identity.Name;
+                UnitOfWork unit = new UnitOfWork();
+                return unit.Agents.Get().FirstOrDefault(x => x.Username == username).Name;
             }
         }
 

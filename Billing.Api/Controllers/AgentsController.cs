@@ -9,7 +9,7 @@ using WebMatrix.WebData;
 
 namespace Billing.Api.Controllers
 {
-    [TokenAuthorization("admin")]
+    //[TokenAuthorization("admin")]
     [RoutePrefix("api/agents")]
     public class AgentsController : BaseController
     {
@@ -99,11 +99,20 @@ namespace Billing.Api.Controllers
         [HttpGet]
         public IHttpActionResult CreateProfiles()
         {
-            WebSecurity.InitializeDatabaseConnection("Billing", "UserProfile", "UserId", "UserName", autoCreateTables: true);
-            foreach (var agent in UnitOfWork.Agents.Get())
+            WebSecurity.InitializeDatabaseConnection
+                ("Billing", "Agents", "Id", "Username", 
+                    autoCreateTables: true);
+            foreach (var agent in UnitOfWork.Agents.Get().ToList())
             {
-                string[] names = agent.Name.Split(' ');
-                WebSecurity.CreateUserAndAccount(names[0], "billing", false);
+                if(string.IsNullOrWhiteSpace(agent.Username))
+                {
+                    string[] names = agent.Name.Split(' ');
+                    string username = names[0].ToLower();
+                    agent.Username = username;
+                    UnitOfWork.Agents.Update(agent, agent.Id);
+                    UnitOfWork.Commit();
+                }
+                WebSecurity.CreateAccount(agent.Username, "billing", false);
             }
             return Ok("user profiles created");
         }
