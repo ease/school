@@ -1,60 +1,23 @@
 <!DOCTYPE html>
-<html ng-app="rsvApp">
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>RSV Imunizacija</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles/bootstrap.css">
-    <link rel="stylesheet" href="styles/sweetalert.css">
-    <link rel="stylesheet" href="styles/font-awesome.css">
-    <link rel="stylesheet" href="styles/site.css">
+<html ng-app="Billing">
 
-    <script src="libraries/angular.min.js"></script>
-    <script src="libraries/angular-animate.min.js"></script>
-    <script src="libraries/angular-local-storage.min.js"></script>
-    <script src="libraries/angular-route.min.js"></script>
-    <script src="libraries/angular-sanitize.min.js"></script>
-    <script src="libraries/angular-idle.min.js"></script>
-    <script src="libraries/ui-bootstrap-tpls.js"></script>
-    <script src="libraries/sweetalert.js"></script>
-    <script src="libraries/chart.min.js"></script>
+  <head>
+    <link rel="stylesheet" href="style.css">
+    <script src="./angular.min.js"></script>
+    <script src="script.js"></script>
+  </head>
 
-    <script src="scripts/app.js"></script>
-    <script src="scripts/controllers/LoginController.js"></script>
-    <script src="scripts/controllers/RegisterController.js"></script>
-    <script src="scripts/controllers/AdminController.js"></script>
-    <script src="scripts/controllers/MainController.js"></script>
-    <script src="scripts/controllers/EditController.js"></script>
-    <script src="scripts/controllers/EventController.js"></script>
-    <script src="scripts/controllers/VisitController.js"></script>
-    <script src="scripts/controllers/VisitaController.js"></script>
-    <script src="scripts/controllers/VistosController.js"></script>
-    <script src="scripts/controllers/DashboardController.js"></script>
-    <script src="scripts/services/LoginService.js"></script>
-    <script src="scripts/services/DataService.js"></script>
-</head>
+  <body ng-controller="MainCtrl">
+    <div>{{ message }}</div>
+    <div style="border:solid 1px blue" ng-show="showAgent">
+        <div>Id: <b>{{ agent.id }}</b></div>
+        <div>Name: <input type="text" ng-model="agent.name"></div>
+        <div><button ng-click="save()">SAVE</button></div>
+    </div>
 
-<body ng-controller="EventController">
-    <header>
-        <div class="container">
-            <div id="title"><img src="images/logo.png" align="middle" alt="logo"></div>
-            <div class="pull-left" style="margin-left:36px">
-                <div ng-repeat="doc in list" class="doctor" tooltip="{{ doc.name }}{{ doc.active }}"><i class="fa fa-user-md"></i><br>{{ doc.inits }}</div>
-            </div>
-            <div class="pull-right" style="margin-top: 36px;" ng-show="UserName">
-                <ng-include src="'views/navUser.html'"></ng-include>
-                <ng-include src="'views/navMain.html'"></ng-include>
-                <ng-include src="'views/navView.html'"></ng-include>
-            </div>
-        </div>
-    </header>
-
-    <div class="container"><div ng-view></div></div>
-
-    <footer>
-        <div id="copyright">Copyright &copy; 2016 by NTG.ba</div>
-    </footer>
-
-    <div id="loader" ng-show="wait"><img id="spinner" src="images/jar.gif" /></div>
-</body>
+    <div ng-repeat="item in agents">
+      {{ item.id }}:: {{ item.name }} <button ng-click="getAgent(item)">GET</button>
+    </div>
+    <button ng-click="new()">NEW AGENT</button>
+  </body>
 </html>
