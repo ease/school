@@ -23,11 +23,10 @@ namespace Billing.Api.Models
     {
         public AgentRegionModel() //List<Region> regions
         {
+            Name = " ";
+            Turnover = 0;
             Sales = new Dictionary<Region, double>();
-            //foreach (var region in regions)
-            //{
-            //    Sales[region.ToString()] = 0;
-            //}
+            for(Region reg=Region.BanjaLuka; reg <= Region.Zenica; reg++) Sales[reg] = 0;
         }
         public string Name { get; set; }
         public double Turnover { get; set; }
