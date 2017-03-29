@@ -14,8 +14,6 @@ namespace Billing.Api.Controllers
     [BillingAuthorization]
     public class LoginController : BaseController
     {
-        private BillingIdentity identity = new BillingIdentity();
-
         [Route("api/login")]
         [HttpPost]
         public IHttpActionResult Login(TokenRequestModel request)
@@ -43,8 +41,8 @@ namespace Billing.Api.Controllers
             if (!WebSecurity.Initialized) WebSecurity.InitializeDatabaseConnection("Billing", "UserProfile", "UserId", "UserName", autoCreateTables: true);
             if (Thread.CurrentPrincipal.Identity.IsAuthenticated)
             {
+                return Ok($"User {Thread.CurrentPrincipal.Identity.Name} logged out");
                 WebSecurity.Logout();
-                return Ok($"User {identity.CurrentUser} logged out");
             }
             else
             {

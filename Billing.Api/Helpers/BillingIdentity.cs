@@ -6,13 +6,20 @@ namespace Billing.Api.Helpers
 {
     public class BillingIdentity
     {
+        private UnitOfWork _unitOfWork;
+
+        public BillingIdentity(UnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
         public string CurrentUser
         {
             get
             {
-                var username = Thread.CurrentPrincipal.Identity.Name;
-                UnitOfWork unit = new UnitOfWork();
-                return unit.Agents.Get().FirstOrDefault(x => x.Username == username).Name;
+                string username = Thread.CurrentPrincipal.Identity.Name;
+                if (string.IsNullOrEmpty(username)) username = "marlon";
+                return _unitOfWork.Agents.Get().FirstOrDefault(x => x.Username == username).Name;
             }
         }
 

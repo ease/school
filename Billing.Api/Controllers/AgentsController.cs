@@ -9,7 +9,6 @@ using WebMatrix.WebData;
 
 namespace Billing.Api.Controllers
 {
-    //[TokenAuthorization("admin")]
     [RoutePrefix("api/agents")]
     public class AgentsController : BaseController
     {

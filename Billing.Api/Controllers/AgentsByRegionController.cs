@@ -4,13 +4,13 @@ using System.Web.Http;
 
 namespace Billing.Api.Controllers
 {
-    public class SalesByRegionController : BaseController
+    public class AgentsByRegionController : BaseController
     {
         public IHttpActionResult Post(RequestModel request)
         {
             try
             {
-                return Ok(Reports.SalesByRegion.Report(request));
+                return Ok(Reports.AgentsByRegion.Report(request));
             }
             catch (Exception ex)
             {

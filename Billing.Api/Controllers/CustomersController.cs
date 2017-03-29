@@ -14,8 +14,6 @@ namespace Billing.Api.Controllers
         [Route("")]
         public IHttpActionResult Get()
         {
-            BillingIdentity identity = new BillingIdentity();
-            string username = identity.CurrentUser;
             return Ok(UnitOfWork.Customers.Get().ToList().Select(x => Factory.Create(x)).ToList());
         }
 

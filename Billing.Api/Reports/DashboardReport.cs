@@ -11,12 +11,13 @@ namespace Billing.Api.Reports
 {
     public class DashboardReport
     {
-        private BillingIdentity identity = new BillingIdentity();
         private ReportFactory Factory = new ReportFactory();
+        private BillingIdentity _identity;
         private UnitOfWork _unitOfWork;
-        public DashboardReport(UnitOfWork unitOfWork)
+        public DashboardReport(UnitOfWork unitOfWork, BillingIdentity identity)
         {
             _unitOfWork = unitOfWork;
+            _identity = identity;
         }
 
         public DashboardModel Report()
@@ -24,7 +25,7 @@ namespace Billing.Api.Reports
             int currentMonth = Convert.ToInt32(ConfigurationManager.AppSettings["currentMonth"]);
             DashboardModel result = new DashboardModel(Helper.StatusCount, Helper.RegionCount);
 
-            result.Title = "Dashboard for " + identity.CurrentUser;
+            result.Title = "Dashboard for " + _identity.CurrentUser;
 
             result.RegionsMonth = _unitOfWork.Invoices.Get()
                     .Where(x => x.Date.Month == currentMonth).ToList()

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Billing.Api.Controllers
+namespace Billing.Api.Models
 {
     public class RequestModel
     {

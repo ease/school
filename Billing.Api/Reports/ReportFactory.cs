@@ -45,18 +45,40 @@ namespace Billing.Api.Reports
                 RegionTotal = Sales,
                 RegionPercent = Math.Round(100 * Sales / GrandTotal, 2)
             };
-            var q1 = Invoices.Where(x => x.Customer.Town.Region.ToString() == Region);
-            var q2 = q1.GroupBy(x => new { id = x.Agent.Id, name = x.Agent.Name });
-            var q3 = q2.Select(x => new AgentSalesModel()
-            {
-                AgentId = x.Key.id,
-                AgentName = x.Key.name,
-                AgentTotal = x.Sum(y => y.Total),
-                RegionPercent = 100 * x.Sum(y => y.Total) / Sales,
-                TotalPercent = 100 * x.Sum(y => y.Total) / GrandTotal
-            });
-            region.Agents = q3.ToList();
+            region.Agents = Invoices.Where(x => x.Customer.Town.Region.ToString() == Region)
+                                    .GroupBy(x => new { id = x.Agent.Id, name = x.Agent.Name })
+                                    .Select(x => new AgentSalesModel()
+                                    {
+                                        AgentId = x.Key.id,
+                                        AgentName = x.Key.name,
+                                        AgentTotal = x.Sum(y => y.Total),
+                                        RegionPercent = 100 * x.Sum(y => y.Total) / Sales,
+                                        TotalPercent = 100 * x.Sum(y => y.Total) / GrandTotal
+                                    })
+                                    .ToList();
             return region;
+        }
+
+        public CategorySalesModel Create(List<Item> Items, int CategoryId, string Category, double Sales)
+        {
+            double GrandTotal = Items.Sum(x => x.SubTotal);
+            CategorySalesModel category = new CategorySalesModel()
+            {
+                CategoryName = Category,
+                CategoryTotal = Sales,
+                CategoryPercent = Math.Round(100 * Sales / GrandTotal, 2)
+            };
+            category.Products = Items.Where(x => x.Product.Category.Id == CategoryId)
+                                     .GroupBy(x => x.Product.Name)
+                                     .Select(x => new ProductSalesModel()
+                                     {
+                                         ProductName = x.Key,
+                                         ProductTotal = x.Sum(y => y.SubTotal),
+                                         CategoryPercent = 100 * x.Sum(y => y.SubTotal) / Sales,
+                                         TotalPercent = 100 * x.Sum(y => y.SubTotal) / GrandTotal
+                                     }).OrderByDescending(x => x.ProductTotal)
+                                    .ToList();
+            return category;
         }
 
         public List<CustomerStatus> Customers(List<InputItem> list)
