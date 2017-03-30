@@ -2,7 +2,7 @@
 
     var app = angular.module("Billing");
 
-    var AgentsCtrl = function($scope, $http) {
+    var AgentsCtrl = function($scope, $http, DataService) {
 
         $scope.showAgent = false;
         ListAgents();
@@ -13,49 +13,22 @@
         };
 
         $scope.save = function(){
-            console.log($scope.agent);
-            var promise = $http({
-                method: "put",
-                url: "http://localhost:9000/api/agents/" + $scope.agent.id,
-                data: $scope.agent
-            });
-
-            $scope.message = "Please wait...";
-            promise.then(function(response){
-                $scope.agent = response.data;
-                $scope.message = " ";
-                ListAgents();
-            }, function(reason){
-                $scope.message = "No data for that request";
-            });
+            if($scope.agent.id == 0)
+                DataService.insert("agents", $scope.agent, function(data){ ListAgents();} );
+            else
+                DataService.update("agents", $scope.agent.id, $scope.agent, function(data){ListAgents();});
         };
 
         $scope.new = function(){
-            $scope.agent.id = 0;
-            var promise = $http({
-                method: "post",
-                url: "http://localhost:9000/api/agents",
-                data: $scope.agent
-            });
-            $scope.message = "Please wait...";
-            promise.then(function(response){
-                $scope.agent = response.data;
-                $scope.message = " ";
-                ListAgents();
-            }, function(reason){
-                $scope.message = "No data for that request";
-            });
+            $scope.agent = {
+                id: 0,
+                name: ""
+            };
+            $scope.showAgent = true;
         };
 
         function ListAgents(){
-            var promise = $http.get("http://localhost:9000/api/agents");
-            $scope.message = "Please wait...";
-            promise.then(function(response){
-                $scope.agents = response.data;
-                $scope.message = " ";
-            }, function(reason){
-                $scope.message = "No data for that request";
-            });
+            DataService.list("agents", function(data){ $scope.agents = data});
         }
     };
 
