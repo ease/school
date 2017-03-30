@@ -13,20 +13,14 @@ namespace Billing.Api.Models
         public double Value { get; set; }
     }
 
-    public class RegionModel
-    {
-        public string Region { get; set; }
-        public double Total { get; set; }
-    }
-
     public class AgentRegionModel
     {
-        public AgentRegionModel() //List<Region> regions
+        public AgentRegionModel()
         {
             Name = " ";
             Turnover = 0;
-            Sales = new Dictionary<Region, double>();
-            for(Region reg=Region.BanjaLuka; reg <= Region.Zenica; reg++) Sales[reg] = 0;
+            Sales = new Dictionary<Database.Region, double>();
+            foreach (Region reg in Region.GetValues(typeof(Region))) Sales[reg] = 0;
         }
         public string Name { get; set; }
         public double Turnover { get; set; }
@@ -38,13 +32,9 @@ namespace Billing.Api.Models
         public AgentsRegionModel()
         {
             Agents = new List<AgentRegionModel>();
-            Regions = new List<RegionModel>();
         }
-
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public double GrandTotal { get; set; }
         public List<AgentRegionModel> Agents { get; set; }
-        public List<RegionModel> Regions { get; set; }
     }
 }

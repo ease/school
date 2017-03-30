@@ -9,20 +9,13 @@ using System.Linq;
 
 namespace Billing.Api.Reports
 {
-    public class SalesByRegionReport
+    public class SalesByRegionReport : BaseReport
     {
-        private ReportFactory Factory = new ReportFactory();
-        private BillingIdentity _identity;
-        private UnitOfWork _unitOfWork;
-        public SalesByRegionReport(UnitOfWork unitOfWork, BillingIdentity identity)
-        {
-            _unitOfWork = unitOfWork;
-            _identity = identity;
-        }
+        public SalesByRegionReport(UnitOfWork unitOfWork) : base(unitOfWork) { }
 
         public SalesByRegionModel Report(RequestModel Request)
         {
-            List<Invoice> Invoices = _unitOfWork.Invoices.Get().Where(x => x.Date >= Request.StartDate && x.Date <= Request.EndDate).ToList();
+            List<Invoice> Invoices = UnitOfWork.Invoices.Get().Where(x => x.Date >= Request.StartDate && x.Date <= Request.EndDate).ToList();
             SalesByRegionModel result = new SalesByRegionModel()
             {
                 StartDate = Request.StartDate,

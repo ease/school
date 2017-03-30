@@ -7,20 +7,13 @@ using System.Linq;
 
 namespace Billing.Api.Reports
 {
-    public class SalesByCustomerReport
+    public class SalesByCustomerReport : BaseReport
     {
-        private ReportFactory Factory = new ReportFactory();
-        private BillingIdentity _identity;
-        private UnitOfWork _unitOfWork;
-        public SalesByCustomerReport(UnitOfWork unitOfWork, BillingIdentity identity)
-        {
-            _unitOfWork = unitOfWork;
-            _identity = identity;
-        }
+        public SalesByCustomerReport(UnitOfWork unitOfWork) : base(unitOfWork) { }
 
         public SalesByCustomerModel Report(RequestModel Request)
         {
-            List<Invoice> Invoices = _unitOfWork.Invoices.Get().Where(x => x.Date >= Request.StartDate && x.Date <= Request.EndDate).ToList();
+            List<Invoice> Invoices = UnitOfWork.Invoices.Get().Where(x => x.Date >= Request.StartDate && x.Date <= Request.EndDate).ToList();
             SalesByCustomerModel result = new SalesByCustomerModel()
             {
                 StartDate = Request.StartDate,

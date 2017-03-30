@@ -9,25 +9,18 @@ using System.Linq;
 
 namespace Billing.Api.Reports
 {
-    public class DashboardReport
+    public class DashboardReport : BaseReport
     {
-        private ReportFactory Factory = new ReportFactory();
-        private BillingIdentity _identity;
-        private UnitOfWork _unitOfWork;
-        public DashboardReport(UnitOfWork unitOfWork, BillingIdentity identity)
-        {
-            _unitOfWork = unitOfWork;
-            _identity = identity;
-        }
+        public DashboardReport(UnitOfWork unitOfWork) : base(unitOfWork) { }
 
         public DashboardModel Report()
         {
             int currentMonth = Convert.ToInt32(ConfigurationManager.AppSettings["currentMonth"]);
             DashboardModel result = new DashboardModel(Helper.StatusCount, Helper.RegionCount);
 
-            result.Title = "Dashboard for " + _identity.CurrentUser;
+            result.Title = "Dashboard for " + Identity.CurrentUser;
 
-            result.RegionsMonth = _unitOfWork.Invoices.Get()
+            result.RegionsMonth = UnitOfWork.Invoices.Get()
                     .Where(x => x.Date.Month == currentMonth).ToList()
                     .GroupBy(x => x.Customer.Town.Region)
                     .OrderBy(x => x.Key)
@@ -35,40 +28,40 @@ namespace Billing.Api.Reports
 
             List<InputItem> query;
 
-            query = _unitOfWork.Invoices.Get()
+            query = UnitOfWork.Invoices.Get()
                     .OrderBy(x => x.Customer.Town.Region).ToList()
                     .GroupBy(x => new { x.Customer.Town.Region, x.Date.Month })
                     .Select(x => new InputItem { Label = x.Key.Region.ToString(), Index = x.Key.Month, Value = x.Sum(y => y.SubTotal) })
                     .ToList();
             result.RegionsYear = Factory.Create(query);
 
-            query = _unitOfWork.Items.Get()
+            query = UnitOfWork.Items.Get()
                     .OrderBy(x => x.Product.Category.Id).ToList()
                     .GroupBy(x => new { x.Product.Category.Name, x.Invoice.Date.Month })
                     .Select(x => new InputItem { Label = x.Key.Name, Index = x.Key.Month, Value = x.Sum(y => y.SubTotal) })
                     .ToList();
             result.CategoriesYear = Factory.Create(query);
 
-            query = _unitOfWork.Invoices.Get()
+            query = UnitOfWork.Invoices.Get()
                     .OrderBy(x => x.Agent.Id).ToList()
                     .GroupBy(x => new { agent = x.Agent.Name, region = x.Customer.Town.Region })
                     .Select(x => new InputItem { Label = x.Key.agent, Index = (int)x.Key.region, Value = x.Sum(y => (y.SubTotal)) })
                     .ToList();
             result.AgentsSales = Factory.Create(query, Helper.RegionCount);
 
-            result.Top5Products = _unitOfWork.Items.Get().OrderBy(x => x.Product.Id).ToList()
+            result.Top5Products = UnitOfWork.Items.Get().OrderBy(x => x.Product.Id).ToList()
                                   .GroupBy(x => x.Product.Name)
                                   .Select(x => new ProductSales()
                                   { Product = x.Key, Quantity = x.Sum(y => y.Quantity), Revenue = x.Sum(y => y.SubTotal) })
                                   .OrderByDescending(x => x.Revenue).Take(5)
                                   .ToList();
 
-            result.Invoices = _unitOfWork.Invoices.Get().OrderBy(x => x.Status).ToList()
+            result.Invoices = UnitOfWork.Invoices.Get().OrderBy(x => x.Status).ToList()
                               .GroupBy(x => x.Status.ToString())
                               .Select(x => new InvoiceStatus() { Status = x.Key, Count = x.Count() })
                               .ToList();
 
-            var custList = _unitOfWork.Invoices.Get()
+            var custList = UnitOfWork.Invoices.Get()
                            .OrderBy(x => x.Customer.Id).ToList()
                            .GroupBy(x => new { x.Customer.Name, x.Status })
                            .Select(x => new InputItem()
@@ -80,7 +73,7 @@ namespace Billing.Api.Reports
                            .ToList();
             result.Customers = Factory.Customers(custList);
 
-            result.BurningItems = _unitOfWork.Products.Get().ToList()
+            result.BurningItems = UnitOfWork.Products.Get().ToList()
                                   .Select(x => new BurningModel() { Id = x.Id, Name = x.Name, Stock = (int)x.Stock.Inventory, Sold = (int)x.Stock.Output })
                                   .OrderByDescending(x => x.Sold).Take(5)
                                   .ToList();

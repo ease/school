@@ -1,0 +1,12 @@
+<div style="border:solid 1px blue" ng-show="showCustomer">
+    <div>Id: <b>{{ customer.id }}</b></div>
+    <div>Name: <input type="text" ng-model="customer.name"></div>
+    <div>Address: <input type="text" ng-model="customer.address"></div>
+    <div>Town: <input type="text" ng-model="customer.town"></div>
+    <div><button ng-click="save()">SAVE</button></div>
+</div>
+
+<div ng-repeat="item in customers">
+    {{ item.id }}:: {{ item.name }} :: {{ item.town }} <button ng-click="getCustomer(item)">GET</button>
+</div>
+<button ng-click="new()">NEW CUSTOMER</button>

@@ -9,7 +9,7 @@ namespace Billing.Api.Reports
 {
     public class ReportFactory
     {
-        public MonthlySales Create(Region region, double sales)
+        public MonthlySales Create(Database.Region region, double sales)
         {
             return new MonthlySales()
             {

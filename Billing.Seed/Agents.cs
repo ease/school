@@ -25,7 +25,7 @@ namespace Billing.Seed
                 string[] Zone = Help.getString(row, 2).Split('.');
                 foreach (string Z in Zone)
                 {
-                    Region R = (Region)Convert.ToInt32(Z);
+                    Database.Region R = (Database.Region)Convert.ToInt32(Z);
                     var area = towns.Get().Where(x => x.Region == R).ToList();
                     foreach (var city in area)
                     {

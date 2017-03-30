@@ -8,9 +8,9 @@ namespace Billing.Api.Helpers
 {
     public static class Helper
     {
-        public static int StatusCount { get { return Enum.GetValues(typeof(Status)).Length; } }
+        public static int StatusCount { get { return System.Enum.GetValues(typeof(Status)).Length; } }
 
-        public static int RegionCount { get { return Enum.GetValues(typeof(Region)).Length; } }
+        public static int RegionCount { get { return System.Enum.GetValues(typeof(Database.Region)).Length; } }
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 

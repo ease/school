@@ -16,9 +16,9 @@ namespace Billing.Tests
 
             UnitOfWork unit = new UnitOfWork();
 
-            unit.Towns.Insert(new Town() { Zip = "71000", Name = "Sarajevo", Region = Region.Sarajevo });
-            unit.Towns.Insert(new Town() { Zip = "72000", Name = "Zenica", Region = Region.Zenica });
-            unit.Towns.Insert(new Town() { Zip = "75000", Name = "Tuzla", Region = Region.Tuzla });
+            unit.Towns.Insert(new Town() { Zip = "71000", Name = "Sarajevo", Region = Database.Region.Sarajevo });
+            unit.Towns.Insert(new Town() { Zip = "72000", Name = "Zenica", Region = Database.Region.Zenica });
+            unit.Towns.Insert(new Town() { Zip = "75000", Name = "Tuzla", Region = Database.Region.Tuzla });
             unit.Commit();
 
             unit.Agents.Insert(new Agent() { Name = "Antonio" });

@@ -7,30 +7,20 @@ using System.Linq;
 
 namespace Billing.Api.Reports
 {
-    public class AgentsByRegionReport
+    public class AgentsByRegionReport : BaseReport
     {
-        private ReportFactory Factory = new ReportFactory();
-        private BillingIdentity _identity;
-        private UnitOfWork _unitOfWork;
-        public AgentsByRegionReport(UnitOfWork unitOfWork, BillingIdentity identity)
-        {
-            _unitOfWork = unitOfWork;
-            _identity = identity;
-        }
+        public AgentsByRegionReport(UnitOfWork unitOfWork) : base(unitOfWork) { }
 
         public AgentsRegionModel Report(RequestModel request)
         {
             AgentsRegionModel result = new AgentsRegionModel();
+            List<InputModel> input;
             result.StartDate = request.StartDate;
             result.EndDate = request.EndDate;
 
-            var query = _unitOfWork.Invoices.Get().Where(x => (x.Date >= request.StartDate && x.Date <= request.EndDate)).ToList();
-
-            result.GrandTotal = query.Sum(x => x.SubTotal);
-
-            List<InputModel> input;
+            var query = UnitOfWork.Invoices.Get().Where(x => (x.Date >= request.StartDate && x.Date <= request.EndDate)).ToList();
             input = query.GroupBy(x => new { region = x.Customer.Town.Region })
-                         .Select(x => new InputModel { Row = "TOTAL", Column = x.Key.region, Value = x.Sum(y => y.SubTotal) })
+                         .Select(x => new InputModel() { Row = "TOTAL", Column = x.Key.region, Value = x.Sum(y => y.SubTotal) })
                          .ToList();
             AgentRegionModel agent = new AgentRegionModel();
             agent.Name = "TOTAL";
