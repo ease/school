@@ -20,14 +20,31 @@ namespace Billing.Api.Reports
             {
                 StartDate = Request.StartDate,
                 EndDate = Request.EndDate,
+                Title = "Sales by Region",
+                Agent = Identity.CurrentUser.Name,
                 GrandTotal = Invoices.Sum(x => x.SubTotal)
             };
 
             result.Sales = Invoices.OrderBy(x => x.Customer.Id).ToList()
-                                   .GroupBy(x => x.Customer.Town.Region.ToString())
-                                   .Select(x => Factory.Create
-                                   (Invoices, x.Key, x.Sum(y => y.SubTotal)))
-                                   .ToList();
+                          .GroupBy(x => x.Customer.Town.Region.ToString())
+                          .Select(x => new SalesByRegionModel.RegionSales() { RegionName=x.Key, RegionTotal=x.Sum(y => y.SubTotal) })
+                          .ToList();
+
+            foreach(var sale in result.Sales)
+            {
+                sale.RegionPercent = Math.Round(100 * sale.RegionTotal / result.GrandTotal, 2);
+                sale.Agents = Invoices.Where(x => x.Customer.Town.Region.ToString() == sale.RegionName)
+                             .OrderBy(x => x.Agent.Name)
+                             .GroupBy(x => x.Agent.Name)
+                             .Select(x => new SalesByRegionModel.AgentSales()
+                             {
+                                 AgentName = x.Key,
+                                 AgentTotal = Math.Round(x.Sum(y => y.Total),2),
+                                 RegionPercent = Math.Round(100 * x.Sum(y => y.Total) / sale.RegionTotal,2),
+                                 TotalPercent = Math.Round(100 * x.Sum(y => y.Total) / result.GrandTotal,2)
+                             }).ToList();
+            }
+
             return result;
         }
     }

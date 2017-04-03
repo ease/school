@@ -15,7 +15,7 @@ namespace Billing.Api.Helpers
     {
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-            if (Thread.CurrentPrincipal.Identity.IsAuthenticated) return;
+            //if (Thread.CurrentPrincipal.Identity.IsAuthenticated) return;
 
             var authHeader = actionContext.Request.Headers.Authorization;
             if(authHeader != null)

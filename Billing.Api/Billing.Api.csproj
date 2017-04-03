@@ -191,8 +191,11 @@
     <Compile Include="Controllers\AgentsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\CustomersByCategoryController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\InvoiceReportController.cs" />
+    <Compile Include="Controllers\InvoicesReviewController.cs" />
     <Compile Include="Controllers\InvoicesController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -201,12 +204,16 @@
     <Compile Include="Controllers\SalesByCategoryController.cs" />
     <Compile Include="Controllers\SalesByCustomerController.cs" />
     <Compile Include="Controllers\SignatureController.cs" />
-    <Compile Include="Controllers\TokenRequestController.cs" />
+    <Compile Include="Controllers\StockLevelController.cs" />
     <Compile Include="Helpers\BillingAuthorizationAttribute.cs" />
     <Compile Include="Helpers\BillingIdentity.cs" />
     <Compile Include="Helpers\InvoiceHelper.cs" />
     <Compile Include="Helpers\TokenAuthorizationAttribute.cs" />
     <Compile Include="Models\AgentsRegionModel.cs" />
+    <Compile Include="Models\CurrentUserModel.cs" />
+    <Compile Include="Models\CustomersCategoryModel.cs" />
+    <Compile Include="Models\InvoiceReportModel.cs" />
+    <Compile Include="Models\InvoicesReviewModel.cs" />
     <Compile Include="Models\RequestModel.cs" />
     <Compile Include="Controllers\SalesByRegionController.cs" />
     <Compile Include="Controllers\ShippersController.cs" />
@@ -229,6 +236,7 @@
     <Compile Include="Models\InvoiceModel.cs" />
     <Compile Include="Models\ItemModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\StockLevelModel.cs" />
     <Compile Include="Models\SupplierModel.cs" />
     <Compile Include="Models\TokenModel.cs" />
     <Compile Include="Models\TokenRequestModel.cs" />
@@ -236,12 +244,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\AgentsByRegionReport.cs" />
     <Compile Include="Reports\BaseReport.cs" />
+    <Compile Include="Reports\CustomersByCategoryReport.cs" />
+    <Compile Include="Reports\InvoiceReport.cs" />
+    <Compile Include="Reports\InvoicesReviewReport.cs" />
     <Compile Include="Reports\ReportFactory.cs" />
     <Compile Include="Reports\SalesByCategoryReport.cs" />
     <Compile Include="Reports\SalesByCustomerReport.cs" />
     <Compile Include="Reports\SetOfReports.cs" />
     <Compile Include="Reports\DashboardReport.cs" />
     <Compile Include="Reports\SalesByRegionReport.cs" />
+    <Compile Include="Reports\StockLevelReport.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

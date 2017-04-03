@@ -90,7 +90,7 @@ namespace Billing.Api.Controllers
             foreach (Product product in products)
             {
                 product.Stock.Input = product.Procurements.Sum(x => x.Quantity);
-                product.Stock.Output = product.Items.Sum(x => x.Quantity);
+                product.Stock.Output = product.Items.Where(x => x.Invoice.Status == Status.InvoiceShipped).Sum(x => x.Quantity);
                 UnitOfWork.Products.Update(product, product.Id);
             }
             UnitOfWork.Commit();

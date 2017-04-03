@@ -1,5 +1,4 @@
-﻿using Billing.Repository;
-using System;
+﻿using System;
 
 namespace Billing.Seed
 {
@@ -13,12 +12,15 @@ namespace Billing.Seed
             Products.Get();
             Towns.Get();
             Agents.Get();
-            Shippers.Get();
-            Suppliers.Get();
-            Customers.Get();
-            Procurements.Get();
+            Agents.GetTowns();
+            Partners.GetShippers();
+            Partners.GetSuppliers();
+            Partners.GetCustomers();
             Invoices.Get();
-            Items.Get();
+            Invoices.GetEvents();
+            Invoices.GetItems();
+            Procurements.Get();
+            Tokens.Create();
             Console.WriteLine("-------------------------");
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();

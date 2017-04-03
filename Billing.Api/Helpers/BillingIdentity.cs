@@ -1,6 +1,9 @@
-﻿using Billing.Repository;
+﻿using Billing.Api.Models;
+using Billing.Database;
+using Billing.Repository;
 using System.Linq;
 using System.Threading;
+using System.Web.Security;
 
 namespace Billing.Api.Helpers
 {
@@ -13,14 +16,27 @@ namespace Billing.Api.Helpers
             _unitOfWork = unitOfWork;
         }
 
-        public string CurrentUser
+        public CurrentUserModel CurrentUser
         {
             get
             {
                 string username = Thread.CurrentPrincipal.Identity.Name;
                 if (string.IsNullOrEmpty(username)) username = "marlon";
-                return _unitOfWork.Agents.Get().FirstOrDefault(x => x.Username == username).Name;
+                Agent agent = _unitOfWork.Agents.Get().FirstOrDefault(x => x.Username == username);
+                return new CurrentUserModel()
+                {
+                    Id = agent.Id,
+                    Name = agent.Name,
+                    Role = GetRoles()
+                };
             }
+        }
+
+        public string GetRoles()
+        {
+            string Roles = HasRole("user") ? "user" : "";
+            Roles += HasRole("admin") ? ",admin" : "";
+            return Roles;
         }
 
         public bool HasRole(string role)

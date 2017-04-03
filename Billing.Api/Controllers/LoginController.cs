@@ -11,9 +11,9 @@ using WebMatrix.WebData;
 
 namespace Billing.Api.Controllers
 {
-    [BillingAuthorization]
     public class LoginController : BaseController
     {
+        [BillingAuthorization]
         [Route("api/login")]
         [HttpPost]
         public IHttpActionResult Login(TokenRequestModel request)
@@ -22,16 +22,18 @@ namespace Billing.Api.Controllers
             if (apiUser == null) return NotFound();
             if (Helper.Signature(apiUser.Secret, apiUser.AppId) != request.Signature) return BadRequest("Bad application signature");
 
-            var rawTokenInfo = apiUser.AppId + DateTime.UtcNow.ToString("s");
+            string rawTokenInfo = DateTime.Now.Ticks.ToString() + apiUser.AppId;
+            byte[] rawTokenByte = Encoding.UTF8.GetBytes(rawTokenInfo);
             var authToken = new AuthToken()
             {
-                Token = rawTokenInfo,
+                Token = Convert.ToBase64String(rawTokenByte),
                 Expiration = DateTime.Now.AddMinutes(20),
                 ApiUser = apiUser
             };
+
             UnitOfWork.Tokens.Insert(authToken);
             UnitOfWork.Commit();
-            return Ok(Factory.Create(authToken));
+            return Ok(Factory.Create(authToken, new BillingIdentity(UnitOfWork).CurrentUser));
         }
 
         [Route("api/logout")]
@@ -41,8 +43,9 @@ namespace Billing.Api.Controllers
             if (!WebSecurity.Initialized) WebSecurity.InitializeDatabaseConnection("Billing", "UserProfile", "UserId", "UserName", autoCreateTables: true);
             if (Thread.CurrentPrincipal.Identity.IsAuthenticated)
             {
-                return Ok($"User {Thread.CurrentPrincipal.Identity.Name} logged out");
+                string message = $"User {Thread.CurrentPrincipal.Identity.Name} logged out";
                 WebSecurity.Logout();
+                return Ok(message);
             }
             else
             {

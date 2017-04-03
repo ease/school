@@ -1,25 +1,15 @@
 ﻿using System;
 using System.Data;
 using System.Data.OleDb;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Billing.Database;
+using Billing.Repository;
 
 namespace Billing.Seed
 {
-    public static class Help
+    public static class Helper
     {
-        public static BillingContext Context = new BillingContext();
-        public static string SourceRoot = @"C:\Projects\Billing\billing.xls";
-
-        public static Dictionary<int, int> dicAgen = new Dictionary<int, int>();
-        public static Dictionary<int, int> dicProd = new Dictionary<int, int>();
-        public static Dictionary<int, int> dicCatt = new Dictionary<int, int>();
-        public static Dictionary<int, int> dicShip = new Dictionary<int, int>();
-        public static Dictionary<int, int> dicSupp = new Dictionary<int, int>();
-        public static Dictionary<int, int> dicCust = new Dictionary<int, int>();
+        public static UnitOfWork Context = new UnitOfWork();
+        public static string SourceRoot = @"C:\NTG\billing.xls";
 
         public static DataTable OpenExcel(string sheet)
         {

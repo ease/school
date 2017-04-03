@@ -1,5 +1,4 @@
 ﻿using Billing.Database;
-using Billing.Repository;
 using System;
 using System.Data;
 
@@ -9,21 +8,23 @@ namespace Billing.Seed
     {
         public static void Get()
         {
-            IBillingRepository<Town> towns = new BillingRepository<Town>(Help.Context);
-            DataTable rawData = Help.OpenExcel("Towns");
+            DataTable rawData = Helper.OpenExcel("Towns");
             int N = 0;
+            Helper.Context.Context.Configuration.AutoDetectChangesEnabled = false;
+            Helper.Context.Context.Configuration.ValidateOnSaveEnabled = false;
             foreach (DataRow row in rawData.Rows)
             {
                 Town town = new Town()
                 {
-                    Zip = Help.getString(row, 0),
-                    Name = Help.getString(row, 1),
-                    Region = (Database.Region)Help.getInteger(row, 2)
+                    Zip = Helper.getString(row, 0),
+                    Name = Helper.getString(row, 1),
+                    Region = (Region)Helper.getInteger(row, 2)
                 };
                 N++;
-                towns.Insert(town);
+                if (N % 100 == 0) Console.Write($"{N} ");
+                Helper.Context.Towns.Insert(town);
             }
-            towns.Commit();
+            Helper.Context.Towns.Commit();
             Console.WriteLine(N);
         }
     }

@@ -9,28 +9,26 @@ namespace Billing.Seed
     {
         public static void Get()
         {
-            IBillingRepository<Procurement> procurements = new BillingRepository<Procurement>(Help.Context);
-            IBillingRepository<Supplier> suppliers = new BillingRepository<Supplier>(Help.Context);
-            IBillingRepository<Product> products = new BillingRepository<Product>(Help.Context);
-            DataTable rawData = Help.OpenExcel("Procurements");
+            DataTable rawData = Helper.OpenExcel("Procurements");
             int N = 0;
+            Helper.Context.Context.Configuration.AutoDetectChangesEnabled = false;
+            Helper.Context.Context.Configuration.ValidateOnSaveEnabled = false;
             foreach (DataRow row in rawData.Rows)
             {
-                Supplier supplier = suppliers.Get(Help.dicSupp[Help.getInteger(row, 2)]);
-                Product product = products.Get(Help.dicProd[Help.getInteger(row, 3)]);
                 Procurement procurement = new Procurement()
                 {
-                    Document = Help.getString(row, 0),
-                    Date = Help.getDate(row, 1),
-                    Supplier = supplier,
-                    Product = product,
-                    Quantity = Help.getInteger(row, 4),
-                    Price = Help.getDouble(row, 5)
+                    Document = Helper.getString(row, 1),
+                    Date = Helper.getDate(row, 2),
+                    Product = Helper.Context.Products.Get(Lexicon.Products[Helper.getInteger(row, 3)]),
+                    Supplier = Helper.Context.Suppliers.Get(Lexicon.Suppliers[Helper.getInteger(row, 4)]),
+                    Quantity = Helper.getInteger(row, 5),
+                    Price = Helper.getDouble(row, 6)
                 };
                 N++;
-                procurements.Insert(procurement);
+                if (N % 100 == 0) Console.Write($"{N} ");
+                Helper.Context.Procurements.Insert(procurement);
             }
-            procurements.Commit();
+            Helper.Context.Commit();
             Console.WriteLine(N);
         }
     }

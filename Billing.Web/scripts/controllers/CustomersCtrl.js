@@ -16,7 +16,7 @@
             console.log($scope.customer);
             var promise = $http({
                 method: "put",
-                url: "http://localhost:9000/api/customers/" + $scope.agent.id,
+                url: "http://localhost:9000/api/customers/" + $scope.customer.id,
                 data: $scope.customer
             });
 

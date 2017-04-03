@@ -13,33 +13,39 @@ namespace Billing.Api.Reports
 
         public AgentsRegionModel Report(RequestModel request)
         {
-            AgentsRegionModel result = new AgentsRegionModel();
-            List<InputModel> input;
-            result.StartDate = request.StartDate;
-            result.EndDate = request.EndDate;
+            AgentsRegionModel result = new AgentsRegionModel()
+            {
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                Title = "Sales by Agents / Regions",
+                Agent = Identity.CurrentUser.Name
+            };
+
+            List<AgentsRegionModel.InputModel> input;
 
             var query = UnitOfWork.Invoices.Get().Where(x => (x.Date >= request.StartDate && x.Date <= request.EndDate)).ToList();
+
             input = query.GroupBy(x => new { region = x.Customer.Town.Region })
-                         .Select(x => new InputModel() { Row = "TOTAL", Column = x.Key.region, Value = x.Sum(y => y.SubTotal) })
+                         .Select(x => new AgentsRegionModel.InputModel() { Row = "TOTAL", Column = x.Key.region, Value = x.Sum(y => y.SubTotal) })
                          .ToList();
-            AgentRegionModel agent = new AgentRegionModel();
+            AgentsRegionModel.AgentModel agent = new AgentsRegionModel.AgentModel();
             agent.Name = "TOTAL";
             foreach (var item in input)
             {
                 agent.Sales[item.Column] = item.Value;
                 agent.Turnover += item.Value;
             }
+
             input = query.OrderBy(x => x.Agent.Name)
                          .GroupBy(x => new { agent = x.Agent.Name, region = x.Customer.Town.Region })
-                         .Select(x => new InputModel { Row = x.Key.agent, Column = x.Key.region, Value = x.Sum(y => y.SubTotal) })
+                         .Select(x => new AgentsRegionModel.InputModel { Row = x.Key.agent, Column = x.Key.region, Value = x.Sum(y => y.SubTotal) })
                          .ToList();
             foreach(var item in input)
             {
                 if(agent.Name != item.Row)
                 {
                     result.Agents.Add(agent);
-                    agent = new AgentRegionModel();
-                    agent.Name = item.Row;
+                    agent = new AgentsRegionModel.AgentModel() { Name = item.Row };
                 }
                 agent.Sales[item.Column] = item.Value;
                 agent.Turnover += item.Value;

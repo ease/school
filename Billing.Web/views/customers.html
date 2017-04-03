@@ -15,10 +15,11 @@
 </div>
 <hr>
 <div class="row" ng-repeat="item in customers | filter:select | orderBy:sort ">
-    <div class="col-md-3">{{ item.id }}</div>
+    <div class="col-md-1">{{ item.id }}</div>
     <div class="col-md-3">{{ item.name }}</div>
-    <div class="col-md-3">{{ item.town }}</div>
-    <div class="col-md-3">
+    <div class="col-md-2">{{ item.town }}</div>
+    <div class="col-md-2">
         <a href="" ng-click="getCustomer(item)">GET</a></div>
+    <div class="col-md-4"></div>
 </div>
 <button ng-click="new()">NEW CUSTOMER</button>

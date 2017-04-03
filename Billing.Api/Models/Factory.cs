@@ -1,4 +1,5 @@
-﻿using Billing.Database;
+﻿using Billing.Api.Helpers;
+using Billing.Database;
 using Billing.Repository;
 using System.Linq;
 
@@ -18,6 +19,7 @@ namespace Billing.Api.Models
             {
                 Id = agent.Id,
                 Name = agent.Name,
+                Username = agent.Username,
                 Towns = agent.Towns.Where(x => x.Customers.Count != 0).Select(x => x.Name).ToList()
             };
         }
@@ -27,7 +29,8 @@ namespace Billing.Api.Models
             return new Agent()
             {
                 Id = model.Id,
-                Name = model.Name
+                Name = model.Name,
+                Username = model.Username
             };
         }
 
@@ -275,12 +278,13 @@ namespace Billing.Api.Models
             };
         }
 
-        public TokenModel Create(AuthToken authToken)
+        public TokenModel Create(AuthToken authToken, CurrentUserModel user)
         {
-            return new Models.TokenModel()
+            return new TokenModel()
             {
                 Token = authToken.Token,
-                Expiration = authToken.Expiration
+                Expiration = authToken.Expiration,
+                CurrentUser = user
             };
         }
     }

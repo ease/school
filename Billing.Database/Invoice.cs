@@ -11,6 +11,7 @@ namespace Billing.Database
         public Invoice()
         {
             Items = new List<Item>();
+            History = new List<Event>();
         }
 
         public int Id { get; set; }

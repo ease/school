@@ -2,6 +2,7 @@
 using Billing.Api.Models;
 using Billing.Database;
 using Billing.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,18 +17,20 @@ namespace Billing.Api.Reports
             List<Invoice> Invoices = UnitOfWork.Invoices.Get().Where(x => x.Date >= Request.StartDate && x.Date <= Request.EndDate).ToList();
             SalesByCustomerModel result = new SalesByCustomerModel()
             {
+                Title = "Sales by Customer",
+                Agent = Identity.CurrentUser.Name,
                 StartDate = Request.StartDate,
                 EndDate = Request.EndDate,
-                GrandTotal = Invoices.Sum(x => x.SubTotal)
+                GrandTotal = Invoices.Sum(x => x.Total)
             };
 
             result.Sales = Invoices.OrderBy(x => x.Customer.Id).ToList()
                                    .GroupBy(x => x.Customer.Name)
-                                   .Select(x => new CustomerSalesModel()
+                                   .Select(x => new SalesByCustomerModel.CustomerModel()
                                    {
                                        CustomerName = x.Key,
-                                       CustomerTurnover = x.Sum(y => y.SubTotal),
-                                       CustomerPercent = 100 * x.Sum(y => y.SubTotal) / result.GrandTotal
+                                       CustomerTurnover = Math.Round(x.Sum(y => y.Total),2),
+                                       CustomerPercent = Math.Round(100 * x.Sum(y => y.Total) / result.GrandTotal,2)
                                    }).OrderByDescending(x => x.CustomerTurnover)
                                    .ToList();
             return result;
