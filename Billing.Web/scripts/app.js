@@ -22,13 +22,13 @@
 
     var app = angular.module("Billing", ["ngRoute"]);
 
-    app.constant("BillingConfig", {
+    /*app.constant("BillingConfig", {
         source: "http://localhost:9000/api/",
         apiKey: "QWxwaGEtQmlsbGluZw==",
         signature: "+jL4gEGBnpMrhaDETCiJjo56i0LTW5Jco1dncoSRNf4=",
         regions: [ "Banja Luka", "Bihac", "Doboj", "Mostar", "Sarajevo", "Trebinje", "Tuzla", "Zenica" ],
         states: [ "Canceled", "OrderCreated", "OrderConfirmed", "InvoiceCreated", "InvoiceSent", "InvoicePaid", "OnHold", "Ready", "Shipped" ]
-    });
+    });*/
 
     app.config(function($routeProvider){
         $routeProvider

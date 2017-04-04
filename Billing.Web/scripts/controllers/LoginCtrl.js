@@ -2,9 +2,23 @@
 
     var app = angular.module("Billing");
 
-    var LoginCtrl = function($scope, $rootScope, $http, $location, LoginService, BillingConfig) {
+    var LoginCtrl = function($scope, $rootScope, $http, $location, LoginService) {
+
+        $http.get("config.json").then(function(response){
+            BillingConfig = response.data;
+            $scope.debug = BillingConfig.debugMode;
+        });
+
+        $scope.loginAs = function(username){
+            $scope.user = { name : username, pass : "billing" }
+            enterSystem();
+        };
 
         $scope.login = function() {
+            enterSystem();
+        };
+
+        function enterSystem() {
             $http.defaults.headers.common.Authorization = "Basic " + LoginService.encode($scope.user.name + ":" + $scope.user.pass);
             var promise = $http({
                 method: "post",
@@ -16,7 +30,7 @@
             promise.then(
                 function(response) {
                     credentials = response.data;
-                    console.log(credentials.currentUser);
+                    console.log(credentials);
                     $rootScope.currentUser = credentials.currentUser.name;
                     $location.path("/agents");
                 },

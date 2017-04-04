@@ -3,7 +3,6 @@ using Billing.Api.Models;
 using Billing.Database;
 using System;
 using System.Linq;
-using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Web.Http;
@@ -30,10 +29,12 @@ namespace Billing.Api.Controllers
                 Expiration = DateTime.Now.AddMinutes(20),
                 ApiUser = apiUser
             };
+            CurrentUserModel Identity = new BillingIdentity(UnitOfWork).CurrentUser;
+            CurrentUser.Id = Identity.Id;
 
             UnitOfWork.Tokens.Insert(authToken);
             UnitOfWork.Commit();
-            return Ok(Factory.Create(authToken, new BillingIdentity(UnitOfWork).CurrentUser));
+            return Ok(Factory.Create(authToken, Identity));
         }
 
         [Route("api/logout")]
